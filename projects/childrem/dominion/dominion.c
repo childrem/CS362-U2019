@@ -60,6 +60,62 @@ int baronEffect(int choice1, struct gameState *state, int currentPlayer) {
 }
 
 
+int minionEffect(int choice1, struct gameState *state, int handPos) {
+	//+1 action
+	state->numActions++;
+
+	//discard card from hand
+	discardCard(handPos, currentPlayer, state, 0);
+
+	if (choice1)		//+2 coins
+	{
+		state->coins = state->coins + 2;
+	}
+
+	else   //discard hand, redraw 4, other players with 5+ cards discard hand and draw 4  // GOT RID OF else if (choice2) HERE!
+	{
+		//discard hand
+		while (numHandCards(state) > 0)
+		{
+			discardCard(handPos, currentPlayer, state, 0);
+		}
+
+		//draw 4
+		for (i = 0; i < 4; i++)
+		{
+			drawCard(currentPlayer, state);
+		}
+
+		//other players discard hand and redraw if hand size > 4
+		for (i = 0; i < state->numPlayers; i++)
+		{
+			if (i != currentPlayer)
+			{
+				if (state->handCount[i] > 4)
+				{
+					//discard hand
+					while (state->handCount[i] > 0)
+					{
+						discardCard(handPos, i, state, 0);
+					}
+
+					//draw 4
+					for (j = 0; j < 4; j++)
+					{
+						drawCard(i, state);
+					}
+				}
+			}
+		}
+
+	}
+
+
+	return 0;
+
+}
+
+
 int compare(const void* a, const void* b) {
   if (*(int*)a > *(int*)b)
     return 1;
@@ -971,55 +1027,58 @@ int cardEffect(int card, int choice1, int choice2, int choice3, struct gameState
       return 0;
 		
     case minion:
+
+		return minionEffect(choice1, state, handPos);
+
       //+1 action
-      state->numActions++;
+      //state->numActions++;
 			
       //discard card from hand
-      discardCard(handPos, currentPlayer, state, 0);
+      //discardCard(handPos, currentPlayer, state, 0);
 			
-      if (choice1)		//+2 coins
-	{
-	  state->coins = state->coins + 2;
-	}
+      //if (choice1)		//+2 coins
+	//{
+	  //state->coins = state->coins + 2;
+	//}
 			
-      else if (choice2)		//discard hand, redraw 4, other players with 5+ cards discard hand and draw 4
-	{
+      //else if (choice2)		//discard hand, redraw 4, other players with 5+ cards discard hand and draw 4
+	//{
 	  //discard hand
-	  while(numHandCards(state) > 0)
-	    {
-	      discardCard(handPos, currentPlayer, state, 0);
-	    }
+	  //while(numHandCards(state) > 0)
+	    //{
+	      //discardCard(handPos, currentPlayer, state, 0);
+	    //}
 				
 	  //draw 4
-	  for (i = 0; i < 4; i++)
-	    {
-	      drawCard(currentPlayer, state);
-	    }
+	  //for (i = 0; i < 4; i++)
+	    //{
+	      //drawCard(currentPlayer, state);
+	    //}
 				
 	  //other players discard hand and redraw if hand size > 4
-	  for (i = 0; i < state->numPlayers; i++)
-	    {
-	      if (i != currentPlayer)
-		{
-		  if ( state->handCount[i] > 4 )
-		    {
+	  //for (i = 0; i < state->numPlayers; i++)
+	    //{
+	      //if (i != currentPlayer)
+		//{
+		  //if ( state->handCount[i] > 4 )
+		    //{
 		      //discard hand
-		      while( state->handCount[i] > 0 )
-			{
-			  discardCard(handPos, i, state, 0);
-			}
+		      //while( state->handCount[i] > 0 )
+			//{
+			  //discardCard(handPos, i, state, 0);
+			//}
 							
 		      //draw 4
-		      for (j = 0; j < 4; j++)
-			{
-			  drawCard(i, state);
-			}
-		    }
-		}
-	    }
+		      //for (j = 0; j < 4; j++)
+			//{
+			  //drawCard(i, state);
+			//}
+		    //}
+		//}
+	    //}
 				
-	}
-      return 0;
+	//}
+      //return 0;
 		
     case steward:
       if (choice1 == 1)
