@@ -60,7 +60,7 @@ int baronEffect(int choice1, struct gameState *state, int currentPlayer) {
 }
 
 
-int minionEffect(int choice1, struct gameState *state, int handPos) {
+int minionEffect(int choice1, struct gameState *state, int handPos, int currentPlayer) {
 	//+1 action
 	state->numActions++;
 
@@ -81,13 +81,13 @@ int minionEffect(int choice1, struct gameState *state, int handPos) {
 		}
 
 		//draw 4
-		for (i = 0; i < 4; i++)
+		for (int i = 0; i < 4; i++)
 		{
 			drawCard(currentPlayer, state);
 		}
 
 		//other players discard hand and redraw if hand size > 4
-		for (i = 0; i < state->numPlayers; i++)
+		for (int i = 0; i < state->numPlayers; i++)
 		{
 			if (i != currentPlayer)
 			{
@@ -100,7 +100,7 @@ int minionEffect(int choice1, struct gameState *state, int handPos) {
 					}
 
 					//draw 4
-					for (j = 0; j < 4; j++)
+					for (int j = 0; j < 4; j++)
 					{
 						drawCard(i, state);
 					}
@@ -1028,7 +1028,7 @@ int cardEffect(int card, int choice1, int choice2, int choice3, struct gameState
 		
     case minion:
 
-		return minionEffect(choice1, state, handPos);
+		return minionEffect(choice1, state, handPos, currentPlayer);
 
       //+1 action
       //state->numActions++;
