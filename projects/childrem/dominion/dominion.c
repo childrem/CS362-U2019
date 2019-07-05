@@ -199,7 +199,7 @@ int tributeEffect(struct gameState *state, int currentPlayer, int nextPlayer, in
 
 	else {
 		if (state->deckCount[nextPlayer] == 0) {
-			for (i = 0; i < state->discardCount[nextPlayer]; i++) {
+			for (int i = 0; i < state->discardCount[nextPlayer]; i++) {
 				state->deck[nextPlayer][i] = state->discard[nextPlayer][i];//Move to deck
 				state->deckCount[nextPlayer]++;
 				state->discard[nextPlayer][i] = -1;
@@ -222,7 +222,7 @@ int tributeEffect(struct gameState *state, int currentPlayer, int nextPlayer, in
 		tributeRevealedCards[1] = -1;
 	}
 
-	for (i = 0; i <= 2; i++) {
+	for (int i = 0; i <= 2; i++) {
 		if (tributeRevealedCards[i] == copper || tributeRevealedCards[i] == silver || tributeRevealedCards[i] == gold) {//Treasure cards
 			state->coins += 2;
 		}
