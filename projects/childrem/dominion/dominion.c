@@ -1231,7 +1231,7 @@ int cardEffect(int card, int choice1, int choice2, int choice3, struct gameState
 		
     case tribute:
 
-		tributeEffect(state, currentPlayer, nextPlayer, tributeRevealedCards);
+		return tributeEffect(state, currentPlayer, nextPlayer, tributeRevealedCards);
 
       //if ((state->discardCount[nextPlayer] + state->deckCount[nextPlayer]) <= 1){
 	//if (state->deckCount[nextPlayer] > 0){
