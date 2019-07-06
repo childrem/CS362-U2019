@@ -131,15 +131,11 @@ int ambassadorEffect(int choice1, int choice2, struct gameState *state, int hand
 	int j = 0;		//used to check if player has enough cards to discard
 	int i;
 
-	if (choice2 > 2 || choice2 < 0)
+	if (choice1 == handPos || choice2 > 2 || choice2 < 0)
 	{
 		return -1;
 	}
 
-	if (choice1 == handPos)
-	{
-		return -1;
-	}
 
 	for (i = 0; i < state->handCount[currentPlayer]; i++)
 	{
