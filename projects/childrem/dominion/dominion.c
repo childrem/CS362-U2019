@@ -18,9 +18,12 @@ void moveFromDiscardToDeck(struct gameState *state, int player) {
 }
 
 
-void addToDiscardCards(struct gameState *state, int cardToAdd) {
+void addToDiscardCards(struct gameState *state, int player, int cardToAdd) {
 
-
+	if (state->discardCount[player] <= MAX_DECK) {		// Can't have a discard count out of bounds
+		state->discard[player][state->discardCount[player]] = cardToAdd;
+		state->discardCount[player]++;
+	}
 }
 
 
@@ -216,7 +219,7 @@ int tributeEffect(struct gameState *state, int currentPlayer, int nextPlayer, in
 
 		else if (state->discardCount[nextPlayer] > 0) {
 			tributeRevealedCards[0] = state->discard[nextPlayer][state->discardCount[nextPlayer] - 1];
-			state->discardCount[nextPlayer]--;
+			//state->discardCount[nextPlayer]--;	// Card already on discard pile so should not move
 		}
 
 		else {
@@ -245,8 +248,7 @@ int tributeEffect(struct gameState *state, int currentPlayer, int nextPlayer, in
 
 	if (tributeRevealedCards[0] == tributeRevealedCards[1]) {//If we have a duplicate card, just drop one 
 		// CALL NEW FXN HERE TO ADD THIS CARD TO DISCARD PILE OF "NEXT PLAYER"
-		state->playedCards[state->playedCardCount] = tributeRevealedCards[1];	// DELETE
-		state->playedCardCount++;		// DELETE
+		addToDiscardCards(state, nextPlayer, tributeRevealedCards[1]);
 		tributeRevealedCards[1] = -1;
 	}
 
@@ -255,17 +257,20 @@ int tributeEffect(struct gameState *state, int currentPlayer, int nextPlayer, in
 		if (tributeRevealedCards[i] == copper || tributeRevealedCards[i] == silver || tributeRevealedCards[i] == gold) {//Treasure cards
 			state->coins += 2;
 			// CALL NEW FXN HERE TO ADD THIS CARD TO DISCARD PILE OF "NEXT PLAYER"
+			addToDiscardCards(state, nextPlayer, tributeRevealedCards[i]);
 		}
 
 		else if (tributeRevealedCards[i] == estate || tributeRevealedCards[i] == duchy || tributeRevealedCards[i] == province || tributeRevealedCards[i] == gardens || tributeRevealedCards[i] == great_hall) {//Victory Card Found
 			drawCard(currentPlayer, state);
 			drawCard(currentPlayer, state);
 			// CALL NEW FXN HERE TO ADD THIS CARD TO DISCARD PILE OF "NEXT PLAYER"
+			addToDiscardCards(state, nextPlayer, tributeRevealedCards[i]);
 		}
 		else {//Action Card
 			if (tributeRevealedCards[i] != -1) {
 				state->numActions = state->numActions + 2;
 				// CALL NEW FXN HERE TO ADD THIS CARD TO DISCARD PILE OF "NEXT PLAYER"
+				addToDiscardCards(state, nextPlayer, tributeRevealedCards[i]);
 			}
 		}
 	}
