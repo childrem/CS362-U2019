@@ -18,6 +18,12 @@ void moveFromDiscardToDeck(struct gameState *state, int player) {
 }
 
 
+void addToDiscardCards(struct gameState *state, int cardToAdd) {
+
+
+}
+
+
 int baronEffect(int choice1, struct gameState *state, int currentPlayer) {
 	
 	state->numBuys++;//Increase buys by 1!
