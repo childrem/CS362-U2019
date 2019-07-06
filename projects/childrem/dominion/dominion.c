@@ -244,8 +244,9 @@ int tributeEffect(struct gameState *state, int currentPlayer, int nextPlayer, in
 	}
 
 	if (tributeRevealedCards[0] == tributeRevealedCards[1]) {//If we have a duplicate card, just drop one 
-		state->playedCards[state->playedCardCount] = tributeRevealedCards[1];
-		state->playedCardCount++;
+		// CALL NEW FXN HERE TO ADD THIS CARD TO DISCARD PILE OF "NEXT PLAYER"
+		state->playedCards[state->playedCardCount] = tributeRevealedCards[1];	// DELETE
+		state->playedCardCount++;		// DELETE
 		tributeRevealedCards[1] = -1;
 	}
 
@@ -253,14 +254,19 @@ int tributeEffect(struct gameState *state, int currentPlayer, int nextPlayer, in
 
 		if (tributeRevealedCards[i] == copper || tributeRevealedCards[i] == silver || tributeRevealedCards[i] == gold) {//Treasure cards
 			state->coins += 2;
+			// CALL NEW FXN HERE TO ADD THIS CARD TO DISCARD PILE OF "NEXT PLAYER"
 		}
 
 		else if (tributeRevealedCards[i] == estate || tributeRevealedCards[i] == duchy || tributeRevealedCards[i] == province || tributeRevealedCards[i] == gardens || tributeRevealedCards[i] == great_hall) {//Victory Card Found
 			drawCard(currentPlayer, state);
 			drawCard(currentPlayer, state);
+			// CALL NEW FXN HERE TO ADD THIS CARD TO DISCARD PILE OF "NEXT PLAYER"
 		}
 		else {//Action Card
-			state->numActions = state->numActions + 2;
+			if (tributeRevealedCards[i] != -1) {
+				state->numActions = state->numActions + 2;
+				// CALL NEW FXN HERE TO ADD THIS CARD TO DISCARD PILE OF "NEXT PLAYER"
+			}
 		}
 	}
 
