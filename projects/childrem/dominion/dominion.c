@@ -5,6 +5,19 @@
 #include <math.h>
 #include <stdlib.h>
 
+
+void moveFromDiscardToDeck(struct gameState *state, int player) {
+
+	for (int i = 0; i < state->discardCount[player]; i++) {
+		state->deck[player][i] = state->discard[player][i];//Move to deck
+		state->deckCount[player]++;
+		state->discard[player][i] = -1;
+		state->discardCount[player]--;
+	}
+
+}
+
+
 int baronEffect(int choice1, struct gameState *state, int currentPlayer) {
 	
 	state->numBuys++;//Increase buys by 1!
@@ -212,12 +225,7 @@ int tributeEffect(struct gameState *state, int currentPlayer, int nextPlayer, in
 
 		if (state->deckCount[nextPlayer] == 0) {
 
-			for (int i = 0; i < state->discardCount[nextPlayer]; i++) {
-				state->deck[nextPlayer][i] = state->discard[nextPlayer][i];//Move to deck
-				state->deckCount[nextPlayer]++;
-				state->discard[nextPlayer][i] = -1;
-				state->discardCount[nextPlayer]--;
-			}
+			moveFromDiscardToDeck(state, nextPlayer);	// Move cards from discard pile to the deck
 
 			shuffle(nextPlayer, state);//Shuffle the deck
 		}
