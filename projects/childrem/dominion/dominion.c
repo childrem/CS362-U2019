@@ -20,18 +20,6 @@ int baronEffect(int choice1, struct gameState *state, int currentPlayer) {
 				
 				discardCard(p, currentPlayer, state, 0);
 
-				/*
-				state->discard[currentPlayer][state->discardCount[currentPlayer]] = state->hand[currentPlayer][p];
-				state->discardCount[currentPlayer]++;
-
-				for (;p < state->handCount[currentPlayer]; p++) {
-					state->hand[currentPlayer][p] = state->hand[currentPlayer][p + 1];
-				}
-
-				state->hand[currentPlayer][state->handCount[currentPlayer]] = -1;
-				state->handCount[currentPlayer]--;
-				*/
-
 				card_not_discarded = 0;//Exit the loop
 			}
 
@@ -155,7 +143,7 @@ int ambassadorEffect(int choice1, int choice2, struct gameState *state, int hand
 
 	for (i = 0; i < state->handCount[currentPlayer]; i++)
 	{
-		if (i != handPos && i == state->hand[currentPlayer][choice1] && i != choice1)
+		if (i != handPos && state->hand[currentPlayer][i] == state->hand[currentPlayer][choice1] && j < 2)
 		{
 			j++;
 		}
