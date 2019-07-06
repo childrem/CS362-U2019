@@ -223,7 +223,7 @@ int tributeEffect(struct gameState *state, int currentPlayer, int nextPlayer, in
 
 	else {
 
-		if (state->deckCount[nextPlayer] == 0) {
+		if (state->deckCount[nextPlayer] < 2) {	
 
 			moveFromDiscardToDeck(state, nextPlayer);	// Move cards from discard pile to the deck
 
@@ -231,11 +231,10 @@ int tributeEffect(struct gameState *state, int currentPlayer, int nextPlayer, in
 		}
 
 		tributeRevealedCards[0] = state->deck[nextPlayer][state->deckCount[nextPlayer] - 1];
-		state->deck[nextPlayer][state->deckCount[nextPlayer]--] = -1;
-		state->deckCount[nextPlayer]--;
-		tributeRevealedCards[1] = state->deck[nextPlayer][state->deckCount[nextPlayer] - 1];
-		state->deck[nextPlayer][state->deckCount[nextPlayer]--] = -1;
-		state->deckCount[nextPlayer]--;
+		state->deck[nextPlayer][state->deckCount[nextPlayer] - 1] = -1;
+		tributeRevealedCards[1] = state->deck[nextPlayer][state->deckCount[nextPlayer] - 2];
+		state->deck[nextPlayer][state->deckCount[nextPlayer] - 2] = -1;
+		state->deckCount[nextPlayer] -= 2;
 	}
 
 	if (tributeRevealedCards[0] == tributeRevealedCards[1]) {//If we have a duplicate card, just drop one 
