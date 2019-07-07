@@ -181,10 +181,10 @@ int ambassadorEffect(int choice1, int choice2, struct gameState *state, int hand
 	//each other player gains a copy of revealed card
 	for (i = 0; i < state->numPlayers; i++)
 	{
-		if (i != currentPlayer)
-		{
+		//if (i != currentPlayer)												// BUG HERE!!! If statement should be active!
+		//{
 			gainCard(state->hand[currentPlayer][choice1], state, 0, i);
-		}
+		//}
 	}
 
 	//discard played card from hand
@@ -214,7 +214,7 @@ int tributeEffect(struct gameState *state, int currentPlayer, int nextPlayer, in
 
 		if (state->deckCount[nextPlayer] > 0) {
 			tributeRevealedCards[0] = state->deck[nextPlayer][state->deckCount[nextPlayer] - 1];
-			state->deckCount[nextPlayer]--;
+			state->deckCount[currentPlayer]--;													// BUG HERE!!! Should be: state->deckCount[nextPlayer]--;
 		}
 
 		else if (state->discardCount[nextPlayer] > 0) {
@@ -249,7 +249,7 @@ int tributeEffect(struct gameState *state, int currentPlayer, int nextPlayer, in
 	if (tributeRevealedCards[0] == tributeRevealedCards[1]) {//If we have a duplicate card, just drop one 
 		// CALL NEW FXN HERE TO ADD THIS CARD TO DISCARD PILE OF "NEXT PLAYER"
 		addToDiscardCards(state, nextPlayer, tributeRevealedCards[1]);
-		tributeRevealedCards[1] = -1;
+		//tributeRevealedCards[1] = -1;													// BUG HERE!!!!! This should be active!
 	}
 
 	for (int i = 0; i <= 2; i++) {
