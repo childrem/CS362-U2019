@@ -296,7 +296,7 @@ int mineEffect(int choice1, int choice2, struct gameState *state, int handPos, i
 	gainCard(choice2, state, 2, currentPlayer);
 
 	//discard card from hand
-	discardCard(handPos, currentPlayer, state, 0);
+	discardCard(handPos, currentPlayer, state, 1);			// BUG HERE!!!! Should be: discardCard(handPos, currentPlayer, state, 0);
 
 	//discard trashed card
 	for (int i = 0; i < state->handCount[currentPlayer]; i++)
@@ -304,7 +304,7 @@ int mineEffect(int choice1, int choice2, struct gameState *state, int handPos, i
 		if (state->hand[currentPlayer][i] == j)
 		{
 			discardCard(i, currentPlayer, state, 1);
-			break;
+			//break;										// BUG HERE!!!! This should be active!
 		}
 	}
 
