@@ -37,7 +37,7 @@ int baronEffect(int choice1, struct gameState *state, int currentPlayer) {
 
 		while (card_not_discarded) {
 
-			if (state->hand[currentPlayer][p] == estate) {//Found an estate card!
+			if (state->hand[currentPlayer][p] == duchy /*estate*/) {//Found an estate card!			BUG HERE!!! SHOULD be == estate
 				state->coins += 4;//Add 4 coins to the amount of coins
 				
 				discardCard(p, currentPlayer, state, 0);
@@ -78,7 +78,7 @@ int baronEffect(int choice1, struct gameState *state, int currentPlayer) {
 		if (supplyCount(estate, state) > 0) {
 
 			gainCard(estate, state, 0, currentPlayer);//Gain an estate
-			state->supplyCount[estate]--;//Decrement Estates
+			//state->supplyCount[estate]--;//Decrement Estates			// BUG HERE!!!! This line should be active!
 
 			if (supplyCount(estate, state) == 0) {
 				isGameOver(state);
@@ -114,7 +114,7 @@ int minionEffect(int choice1, struct gameState *state, int handPos, int currentP
 		}
 
 		//draw 4
-		for (int i = 0; i < 4; i++)
+		for (int i = 0; i < 5; i++)										// BUG HERE!!!! SHOULD BE: for (int i = 0; i < 4; i++)
 		{
 			drawCard(currentPlayer, state);
 		}
@@ -124,7 +124,7 @@ int minionEffect(int choice1, struct gameState *state, int handPos, int currentP
 		{
 			if (i != currentPlayer)
 			{
-				if (state->handCount[i] > 4)
+				if (state->handCount[i] >= 4)							// BUG HERE!!!! SHOULD BE: if (state->handCount[i] > 4)
 				{
 					//discard hand
 					while (state->handCount[i] > 0)
@@ -153,7 +153,7 @@ int ambassadorEffect(int choice1, int choice2, struct gameState *state, int hand
 	int j = 0;		//used to check if player has enough cards to discard
 	int i;
 
-	if (choice1 == handPos || choice2 > 2 || choice2 < 0)
+	if (choice1 == handPos || choice2 < 0)				// BUG HERE!!! Should be: if (choice1 == handPos || choice2 > 2 || choice2 < 0)
 	{
 		return -1;
 	}
