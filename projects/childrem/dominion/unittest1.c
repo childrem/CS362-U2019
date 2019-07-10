@@ -56,20 +56,29 @@ int main() {
 	printf("TESTING baronEffect():\n");
 
 
-	// TEST 1 -- choice1 is set -- we should be discarding an estate and adding 4 gold to currentPlayer
+	// TEST 1 -- choice1 is set -- we should be discarding an estate and adding 4 coins to currentPlayer
 
 	// initialze game
 	memset(&G, 23, sizeof(struct gameState));
 	memset(&beforeFunction, 23, sizeof(struct gameState));
 
 	r = initializeGame(numPlayer, k, seed, &G);
+	G.coins = 0;			// Start at 0 in test cases for easy 
 
 	// capture initial state of the game
 	memcpy(&beforeFunction, &G, sizeof(struct gameState));
 
 	// run function to test
-
+	choice1 = 1;
+	currentPlayer = 0;
 	
+	retValue = baronEffect(choice1, &G, currentPlayer);
+
+
+	// compare number of coins expected vs actual
+
+	asserttrue(G.coins, beforeFunction.coins + 4, "COINS");
+
 
 	// TEST 2 -- choice1 is NOT set -- currentPlayer should be gaining an estate (coins should remain the same)
 
