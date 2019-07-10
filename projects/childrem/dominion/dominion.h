@@ -128,4 +128,14 @@ int getWinners(int players[MAX_PLAYERS], struct gameState *state);
 /* Set array position of each player who won (remember ties!) to
    1, others to 0 */
 
+// Refactored Functions created in Assignment 2 (see dominion.c for details)
+
+void moveFromDiscardToDeck(struct gameState *state, int player);
+void addToDiscardCards(struct gameState *state, int player, int cardToAdd);
+int baronEffect(int choice1, struct gameState *state, int currentPlayer);
+int minionEffect(int choice1, struct gameState *state, int handPos, int currentPlayer);
+int ambassadorEffect(int choice1, int choice2, struct gameState *state, int handPos, int currentPlayer);
+int tributeEffect(struct gameState *state, int currentPlayer, int nextPlayer, int* tributeRevealedCards);
+int mineEffect(int choice1, int choice2, struct gameState *state, int handPos, int currentPlayer);
+
 #endif
