@@ -42,6 +42,10 @@ int main() {
 	int currentPlayer;		// 0 will be player 1 and 1 will be player 2
 	int retValue;		// return value for function being tested
 
+	int numEstates;		// Will count number of estates in a player's hand
+	#define numEstatesBefore 1;	// Number of estates that will appear in each player's hand
+	int tempNumEstatesBefore;	// Used in the for loop to make unit test more robust
+
 	// arrays of all coppers, silvers, and golds
 	//int coppers[MAX_HAND];
 	//int silvers[MAX_HAND];
@@ -65,6 +69,26 @@ int main() {
 	r = initializeGame(numPlayer, k, seed, &G);
 	G.coins = 0;			// Start at 0 in test cases for easy 
 
+
+	// We need to make sure that each player has at least 1 estate card in their first hand for testing
+	// Set other hand positions to copper for better control
+
+	for (int c = 0; c < numPlayer; c++) {
+		tempNumEstatesBefore = numEstatesBefore;
+
+		for (int handPosition = 0; handPosition < maxHandCount; handPosition++) {
+			if (tempNumEstatesBefore > 0) {
+				G.hand[c][handPosition] = estate;
+				tempNumEstatesBefore--;
+			}
+
+			else {
+				G.hand[c][handPosition] = copper;
+			}
+		}
+
+	}
+
 	// capture initial state of the game
 	memcpy(&beforeFunction, &G, sizeof(struct gameState));
 
@@ -78,6 +102,32 @@ int main() {
 	// compare number of coins expected vs actual
 
 	asserttrue(G.coins, beforeFunction.coins + 4, "COINS");
+
+
+	// compare the number of estate cards in the current player's hand (should have decreased by 1)
+
+	tempNumEstatesBefore = numEstatesBefore;
+
+	for (int c = 0; c < numPlayer; c++) {
+
+		numEstates = 0;
+
+		for (int handPosition = 0; handPosition < maxHandCount; handPosition++) {
+
+			if (G.hand[c][handPosition] == estate) {
+				numEstates++;
+			}
+		}
+
+		if (c == 0) {		// the current player
+			asserttrue(numEstates, tempNumEstatesBefore - 1, "Current Player Num Estates");
+		}
+
+		else {
+			asserttrue(numEstates, tempNumEstatesBefore, "Other Player Num Estates");
+		}
+
+	}
 
 
 	// TEST 2 -- choice1 is NOT set -- currentPlayer should be gaining an estate (coins should remain the same)
