@@ -6,9 +6,6 @@
 #include "rngs.h"
 
 
-// set NOISY_TEST to 0 to remove printfs from output
-#define NOISY_TEST 1
-
 void asserttrue(int actualValue, int expectedValue, char* valueName) {
 
 	if (actualValue == expectedValue) {
@@ -27,12 +24,10 @@ void asserttrue(int actualValue, int expectedValue, char* valueName) {
 
 
 int main() {
-	int i;
 	int seed = 1000;
 	int numPlayer = 2;
 	int maxBonus = 10;
-	int p, r, handCount;
-	int bonus;
+	int r;
 	int k[10] = { minion, ambassador, tribute, gardens, mine
 			   , remodel, smithy, village, baron, great_hall };
 	struct gameState G, beforeFunction;
@@ -46,16 +41,7 @@ int main() {
 	#define numEstatesBefore 1;	// Number of estates that will appear in each player's hand
 	int tempNumEstatesBefore;	// Used in the for loop to make unit test more robust
 
-	// arrays of all coppers, silvers, and golds
-	//int coppers[MAX_HAND];
-	//int silvers[MAX_HAND];
-	//int golds[MAX_HAND];
-	//for (i = 0; i < MAX_HAND; i++)
-	//{
-		//coppers[i] = copper;
-		//silvers[i] = silver;
-		//golds[i] = gold;
-	//}
+	
 
 	printf("TESTING baronEffect():\n");
 	printf("\nFirst test has choice1 set\n\n");
@@ -87,10 +73,6 @@ int main() {
 				G.hand[c][handPosition] = copper;
 			}
 		}
-
-		// free up last position to gain an estate if needed
-
-		//discardCard(G.hand[c][maxHandCount-1], c, &G, 0);
 
 	}
 
@@ -125,22 +107,23 @@ int main() {
 		}
 
 		if (c == 0) {		// the current player
-			asserttrue(numEstates, tempNumEstatesBefore - 1, "Current Player Num Estates");
+			asserttrue(numEstates, tempNumEstatesBefore - 1, "Current Player Num Estates In Hand:");
 		}
 
 		else {
-			asserttrue(numEstates, tempNumEstatesBefore, "Other Player Num Estates");
+			asserttrue(numEstates, tempNumEstatesBefore, "Other Player Num Estates In Hand:");
 		}
 
 	}
 
 
-	// Check to see if the discard count increased by 1 and that the last position of the discard array is an estate
+	// Check to see if the discard count increased by 1 and if the last position of the discard array is an estate
+	// If this passes then an estate was GAINED (so test FAILED)
 
-	asserttrue(G.discardCount[currentPlayer], beforeFunction.discardCount[currentPlayer], "Current Player Discard Count");
+	asserttrue(G.discardCount[currentPlayer], beforeFunction.discardCount[currentPlayer] + 1, "Current Player Discard Count");
 
 	asserttrue(G.discard[currentPlayer][G.discardCount[currentPlayer]-1], estate, 
-		"Newest discard card (Would be 1 for estate If this Passes it means code FAILED):");
+		"Newest discard card (Would be 1 for estate):");
 
 
 	// Make sure the other player's discard pile stayed the same
@@ -212,11 +195,11 @@ int main() {
 		}
 
 		if (c == 0) {		// the current player
-			asserttrue(numEstates, tempNumEstatesBefore, "Current Player Num Estates");
+			asserttrue(numEstates, tempNumEstatesBefore, "Current Player Num Estates In Hand");
 		}
 
 		else {
-			asserttrue(numEstates, tempNumEstatesBefore, "Other Player Num Estates");
+			asserttrue(numEstates, tempNumEstatesBefore, "Other Player Num Estates In Hand");
 		}
 
 	}
@@ -235,46 +218,7 @@ int main() {
 		"Other Player Discard Count");
 
 
-	//asserttrue(5, 6, "coins");
-
-	/*
-	for (p = 0; p < numPlayer; p++)
-	{
-		for (handCount = 1; handCount <= maxHandCount; handCount++)
-		{
-			for (bonus = 0; bonus <= maxBonus; bonus++)
-			{
-#if (NOISY_TEST == 1)
-				printf("Test player %d with %d treasure card(s) and %d bonus.\n", p, handCount, bonus);
-#endif
-				memset(&G, 23, sizeof(struct gameState));   // clear the game state
-				r = initializeGame(numPlayer, k, seed, &G); // initialize a new game
-				G.handCount[p] = handCount;                 // set the number of cards on hand
-				memcpy(G.hand[p], coppers, sizeof(int) * handCount); // set all the cards to copper
-				updateCoins(p, &G, bonus);
-#if (NOISY_TEST == 1)
-				printf("G.coins = %d, expected = %d\n", G.coins, handCount * 1 + bonus);
-#endif
-				assert(G.coins == handCount * 1 + bonus); // check if the number of coins is correct
-
-				memcpy(G.hand[p], silvers, sizeof(int) * handCount); // set all the cards to silver
-				updateCoins(p, &G, bonus);
-#if (NOISY_TEST == 1)
-				printf("G.coins = %d, expected = %d\n", G.coins, handCount * 2 + bonus);
-#endif
-				assert(G.coins == handCount * 2 + bonus); // check if the number of coins is correct
-
-				memcpy(G.hand[p], golds, sizeof(int) * handCount); // set all the cards to gold
-				updateCoins(p, &G, bonus);
-#if (NOISY_TEST == 1)
-				printf("G.coins = %d, expected = %d\n", G.coins, handCount * 3 + bonus);
-#endif
-				assert(G.coins == handCount * 3 + bonus); // check if the number of coins is correct
-			}
-		}
-	}
-
-	*/
+	
 
 	printf("\nEnd of Unit Test!\n");
 
