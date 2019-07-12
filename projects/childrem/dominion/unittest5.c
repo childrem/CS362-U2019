@@ -130,12 +130,12 @@ int main() {
 	asserttrue(G.hand[currentPlayer][0], beforeFunction.hand[currentPlayer][0], 
 		"Card is still a copper (should be enum 4)");
 
-	/*
+	
 
-	// TEST 2 -- Player has 1 copy of card they want to return to supply, but choose to send back 3 --
-	// Code should catch invalid value for choice2 and return without changing the state of the game
+	// TEST 2 -- Player has a copper asks for an ambassador --
+	// Should not affect game state
 
-	printf("\n\nTest 2 Have 1 copy asking to return 3!\n\n");
+	printf("\n\nTest 2 Have a copper ask for an ambassador!\n\n");
 
 	// initialze new game
 	memset(&G, 23, sizeof(struct gameState));
@@ -146,22 +146,21 @@ int main() {
 	G.coins = 0;			// Start at 0 in test cases for easy 
 
 
-	// Need to create the hands that the player's have. It will need 1 tribute card, 1 ambassador, and I'll make the rest
-	// coppers arbitrarily. The first hand position will have the tribute card.
+	// Need to create the hands that the player's have. It will need 1 copper, 1 mine, and the rest arbitrary cards.
 
 	for (int c = 0; c < numPlayer; c++) {
 
 		for (int handPosition = 0; handPosition < maxHandCount; handPosition++) {
 			if (handPosition == 0) {
-				G.hand[c][handPosition] = tribute;
+				G.hand[c][handPosition] = copper;
 			}
 
-			else if (handPosition == maxHandCount - 1) {
-				G.hand[c][handPosition] = ambassador;
+			else if (handPosition == 1) {
+				G.hand[c][handPosition] = mine;
 			}
 
 			else {
-				G.hand[c][handPosition] = copper;
+				G.hand[c][handPosition] = ambassador;
 			}
 		}
 
@@ -176,14 +175,16 @@ int main() {
 	// run function to test
 
 	choice1 = 0;
-	choice2 = 3;
-	handPos = maxHandCount - 1;
+	choice2 = ambassador;
+	handPos = 1;
 
 
-	retValue = ambassadorEffect(choice1, choice2, &G, handPos, currentPlayer);
+
+	retValue = mineEffect(choice1, choice2, &G, handPos, currentPlayer);
 
 
-	// Assert that player hand count is unchanged
+
+	// Assert that player hand count is unchanged (nothing should have been played)
 
 	asserttrue(G.handCount[currentPlayer], beforeFunction.handCount[currentPlayer], "Hand Count of Current Player");
 
@@ -195,20 +196,31 @@ int main() {
 
 	// Assert that supply count is unchanged
 
-	asserttrue(G.supplyCount[G.hand[currentPlayer][choice1]],
-		beforeFunction.supplyCount[beforeFunction.hand[currentPlayer][choice1]],
+	asserttrue(G.supplyCount[copper],
+		beforeFunction.supplyCount[copper],
 		"Supply of card that was chosen to return");
 
 	// Assert that other player discard count is unchanged
 
 	asserttrue(G.discardCount[nextPlayer], beforeFunction.discardCount[nextPlayer], "Discard Count of Next Player");
 
+	// Assert that current player discard count is unchanged (nothing should be played)
+
+	asserttrue(G.discardCount[currentPlayer], beforeFunction.discardCount[currentPlayer],
+		"Discard Count of Current Player");
+
+	// Assert that treasure in hand is still a copper
+
+	asserttrue(G.hand[currentPlayer][0], beforeFunction.hand[currentPlayer][0],
+		"Card is still a copper (should be enum 4)");
 
 
-	// TEST 3 -- Player has 1 copy of card, and asks to return 1 copy, but asks to return the ambassador card itself --
-	// Current game state should be unchanged
 
-	printf("\n\nTest 3 Have 1 copy asking to return 1, but ambassador itself!\n\n");
+	// TEST 3 -- Player has 2 coppers, asks for a silver --
+	// We should see a discard count of 1 (the actual mine card), 1 copper should be trashed with 1 copper 
+	// still in hand, there should be 1 silver in hand and supply of silver should be 1 less.
+
+	printf("\n\nTest 3 Have 2 coppers ask for a silver!\n\n");
 
 	// initialze new game
 	memset(&G, 23, sizeof(struct gameState));
@@ -219,22 +231,21 @@ int main() {
 	G.coins = 0;			// Start at 0 in test cases for easy 
 
 
-	// Need to create the hands that the player's have. It will need 1 tribute card, 1 ambassador, and I'll make the rest
-	// coppers arbitrarily. The first hand position will have the tribute card.
+	// Need to create the hands that the player's have. It will need 2 coppers, 1 mine, and the rest arbitrary cards.
 
 	for (int c = 0; c < numPlayer; c++) {
 
 		for (int handPosition = 0; handPosition < maxHandCount; handPosition++) {
-			if (handPosition == 0) {
-				G.hand[c][handPosition] = tribute;
+			if (handPosition == 0 || handPosition == 2) {
+				G.hand[c][handPosition] = copper;
 			}
 
-			else if (handPosition == maxHandCount - 1) {
-				G.hand[c][handPosition] = ambassador;
+			else if (handPosition == 1) {
+				G.hand[c][handPosition] = mine;
 			}
 
 			else {
-				G.hand[c][handPosition] = copper;
+				G.hand[c][handPosition] = ambassador;
 			}
 		}
 
@@ -248,131 +259,68 @@ int main() {
 
 	// run function to test
 
-	choice2 = 1;
-	handPos = maxHandCount - 1;
-	choice1 = handPos;
-
-
-	retValue = ambassadorEffect(choice1, choice2, &G, handPos, currentPlayer);
-
-
-	// Assert that player hand count is unchanged
-
-	asserttrue(G.handCount[currentPlayer], beforeFunction.handCount[currentPlayer], "Hand Count of Current Player");
-
-
-	// Assert that other player hand count is unchanged
-
-	asserttrue(G.handCount[nextPlayer], beforeFunction.handCount[nextPlayer], "Hand Count of Next Player");
-
-
-	// Assert that supply count is unchanged
-
-	asserttrue(G.supplyCount[G.hand[currentPlayer][choice1]],
-		beforeFunction.supplyCount[beforeFunction.hand[currentPlayer][choice1]],
-		"Supply of card that was chosen to return");
-
-	// Assert that other player discard count is unchanged
-
-	asserttrue(G.discardCount[nextPlayer], beforeFunction.discardCount[nextPlayer], "Discard Count of Next Player");
-
-
-
-	// TEST 4 -- Player has 2 copies of card and chooses to return 2 copies to the supply --
-	// We should see the player’s hand count decrease by 3 (the ambassador card leaves as well as the returned tributes), 
-	// the supply count should increase by 1 (2 returned – 1 received by other player) and other player’s discard count 
-	// should increase by 1 (this card should be a tribute).
-
-	printf("\n\nTest 4 Have 2 copies asking to return 2!\n\n");
-
-	// initialze new game
-	memset(&G, 23, sizeof(struct gameState));
-	memset(&beforeFunction, 23, sizeof(struct gameState));
-
-	r = initializeGame(numPlayer, k, seed, &G);
-
-	G.coins = 0;			// Start at 0 in test cases for easy 
-
-
-	// Need to create the hands that the player's have. It will need 1 tribute card, 1 ambassador, and I'll make the rest
-	// coppers arbitrarily. The first hand position will have the tribute card.
-
-	for (int c = 0; c < numPlayer; c++) {
-
-		for (int handPosition = 0; handPosition < maxHandCount; handPosition++) {
-			if (handPosition == 0 || handPosition == 1) {
-				G.hand[c][handPosition] = tribute;
-			}
-
-			else if (handPosition == maxHandCount - 1) {
-				G.hand[c][handPosition] = ambassador;
-			}
-
-			else {
-				G.hand[c][handPosition] = copper;
-			}
-		}
-
-	}
-
-	G.handCount[nextPlayer] = 5;
-
-
-	// capture initial state of the game
-	memcpy(&beforeFunction, &G, sizeof(struct gameState));
-
-
-	// run function to test
-
-	choice2 = 2;
-	handPos = maxHandCount - 1;
 	choice1 = 0;
+	choice2 = silver;
+	handPos = 1;
 
 
-	retValue = ambassadorEffect(choice1, choice2, &G, handPos, currentPlayer);
+
+	retValue = mineEffect(choice1, choice2, &G, handPos, currentPlayer);
 
 
-	// Assert that player hand count is 3 less
 
-	asserttrue(G.handCount[currentPlayer], beforeFunction.handCount[currentPlayer] - 3, "Hand Count of Current Player");
+	// Assert that player hand count is 4 (mine discarded, treasure balanced out = net loss of 1 card)
+
+	asserttrue(G.handCount[currentPlayer], beforeFunction.handCount[currentPlayer] - 1, "Hand Count of Current Player");
 
 
 	// Assert that other player hand count is unchanged
 
 	asserttrue(G.handCount[nextPlayer], beforeFunction.handCount[nextPlayer], "Hand Count of Next Player");
 
-	// Make sure no tributes remain
 
-	int tributeFound = 0;
+	// Assert that supply count of copper is unchanged
+
+	asserttrue(G.supplyCount[copper],
+		beforeFunction.supplyCount[copper],
+		"Supply of card that was chosen to return (copper)");
+
+	// Assert that supply count of silver is -1
+
+	asserttrue(G.supplyCount[silver],
+		beforeFunction.supplyCount[silver] - 1,
+		"Supply of card that was chosen to gain (silver)");
+
+	// Assert that other player discard count is unchanged
+
+	asserttrue(G.discardCount[nextPlayer], beforeFunction.discardCount[nextPlayer], "Discard Count of Next Player");
+
+	// Assert that current player discard count is +1 (the played mine card)
+
+	asserttrue(G.discardCount[currentPlayer], beforeFunction.discardCount[currentPlayer] + 1,
+		"Discard Count of Current Player");
+
+	// Assert that player has 1 copper and 1 silver in hand
+
+	int numberCopper = 0;
+	int numberSilver = 0;
 
 	for (int handPosition = 0; handPosition < maxHandCount; handPosition++) {
-		if (G.hand[currentPlayer][handPosition] == tribute) {
-			tributeFound = 1;
+
+		if (G.hand[currentPlayer][handPosition] == copper) {
+			numberCopper++;
 		}
+
+		else if (G.hand[currentPlayer][handPosition] == silver) {
+			numberSilver++;
+		}
+
 	}
 
-	asserttrue(tributeFound, 0, "Tribute Card Found in Current Player Hand (Yes = 1, No = 0):");
+	asserttrue(numberCopper, 1, "Number of Coppers in Current Player's Hand");
+	asserttrue(numberSilver, 1, "Number of Silvers in Current Player's Hand");
 
 
-	// Assert that supply count is + 1
-
-	asserttrue(G.supplyCount[tribute],
-		beforeFunction.supplyCount[tribute] + 1,
-		"Supply of card that was chosen to return");
-
-	// Assert that other player discard count is + 1
-
-	asserttrue(G.discardCount[nextPlayer], beforeFunction.discardCount[nextPlayer] + 1, "Discard Count of Next Player");
-
-	// Assert that gained card was a tribute
-
-	asserttrue(G.discard[nextPlayer][G.discardCount[nextPlayer] - 1], tribute, "Gained card should be tribute (19)");
-
-	// Assert that current player discard count is + 1 (the ambassador card)
-
-	asserttrue(G.discardCount[currentPlayer], beforeFunction.discardCount[currentPlayer], "Discard Count of Current Player");
-
-*/
 
 	printf("\n\nEnd of Unit Test!\n");
 
