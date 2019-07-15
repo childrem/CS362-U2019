@@ -27,7 +27,7 @@ int main() {
 	int seed = 1000;
 	int numPlayer = 2;
 	int maxBonus = 10;
-	int r;
+	//int r;
 	int k[10] = { minion, ambassador, tribute, gardens, mine
 			   , remodel, smithy, village, baron, great_hall };
 	struct gameState G, beforeFunction;
@@ -35,7 +35,7 @@ int main() {
 
 	int choice1;
 	int currentPlayer;		// 0 will be player 1 and 1 will be player 2
-	int retValue;		// return value for function being tested
+	//int retValue;		// return value for function being tested
 
 	int numEstates;		// Will count number of estates in a player's hand
 	#define numEstatesBefore 1;	// Number of estates that will appear in each player's hand
@@ -52,7 +52,7 @@ int main() {
 	memset(&G, 23, sizeof(struct gameState));
 	memset(&beforeFunction, 23, sizeof(struct gameState));
 
-	r = initializeGame(numPlayer, k, seed, &G);
+	/*r = */initializeGame(numPlayer, k, seed, &G);
 	G.coins = 0;			// Start at 0 in test cases for easy 
 
 
@@ -83,7 +83,7 @@ int main() {
 	choice1 = 1;
 	currentPlayer = 0;
 	
-	retValue = baronEffect(choice1, &G, currentPlayer);
+	/*retValue = */baronEffect(choice1, &G, currentPlayer);
 
 
 	// compare number of coins expected vs actual
@@ -141,7 +141,7 @@ int main() {
 	memset(&G, 23, sizeof(struct gameState));
 	memset(&beforeFunction, 23, sizeof(struct gameState));
 
-	r = initializeGame(numPlayer, k, seed, &G);
+	/*r = */initializeGame(numPlayer, k, seed, &G);
 	G.coins = 0;			// Start at 0 in test cases for easy 
 
 
@@ -171,7 +171,7 @@ int main() {
 	choice1 = 0;
 	currentPlayer = 0;
 
-	retValue = baronEffect(choice1, &G, currentPlayer);
+	/*retValue = */baronEffect(choice1, &G, currentPlayer);
 
 
 	// compare number of coins expected vs actual
