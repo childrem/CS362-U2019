@@ -26,8 +26,8 @@ void asserttrue(int actualValue, int expectedValue, char* valueName) {
 int main() {
 	int seed = 1000;
 	int numPlayer = 2;
-	int maxBonus = 10;
-	int r;
+	//int maxBonus = 10;
+	//int r;
 	int k[10] = { minion, ambassador, tribute, gardens, mine
 			   , remodel, smithy, village, baron, great_hall };
 	struct gameState G, beforeFunction;
@@ -35,7 +35,7 @@ int main() {
 
 
 	int currentPlayer = 0;		// 0 will be player 1 and 1 will be player 2
-	int retValue;		// return value for function being tested
+	//int retValue;		// return value for function being tested
 
 
 	int nextPlayer = currentPlayer + 1;
@@ -57,7 +57,7 @@ int main() {
 	memset(&G, 23, sizeof(struct gameState));
 	memset(&beforeFunction, 23, sizeof(struct gameState));
 
-	r = initializeGame(numPlayer, k, seed, &G);
+	/*r = */initializeGame(numPlayer, k, seed, &G);
 
 	G.coins = 0;			// Start at 0 in test cases for easy 
 
@@ -96,7 +96,7 @@ int main() {
 
 
 
-	retValue = mineEffect(choice1, choice2, &G, handPos, currentPlayer);
+	/*retValue = */mineEffect(choice1, choice2, &G, handPos, currentPlayer);
 
 
 
@@ -141,7 +141,7 @@ int main() {
 	memset(&G, 23, sizeof(struct gameState));
 	memset(&beforeFunction, 23, sizeof(struct gameState));
 
-	r = initializeGame(numPlayer, k, seed, &G);
+	/*r = */initializeGame(numPlayer, k, seed, &G);
 
 	G.coins = 0;			// Start at 0 in test cases for easy 
 
@@ -180,7 +180,7 @@ int main() {
 
 
 
-	retValue = mineEffect(choice1, choice2, &G, handPos, currentPlayer);
+	/*retValue = */mineEffect(choice1, choice2, &G, handPos, currentPlayer);
 
 
 
@@ -226,7 +226,7 @@ int main() {
 	memset(&G, 23, sizeof(struct gameState));
 	memset(&beforeFunction, 23, sizeof(struct gameState));
 
-	r = initializeGame(numPlayer, k, seed, &G);
+	/*r = */initializeGame(numPlayer, k, seed, &G);
 
 	G.coins = 0;			// Start at 0 in test cases for easy 
 
@@ -265,7 +265,7 @@ int main() {
 
 
 
-	retValue = mineEffect(choice1, choice2, &G, handPos, currentPlayer);
+	/*retValue = */mineEffect(choice1, choice2, &G, handPos, currentPlayer);
 
 
 
