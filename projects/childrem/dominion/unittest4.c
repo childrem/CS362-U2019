@@ -26,16 +26,16 @@ void asserttrue(int actualValue, int expectedValue, char* valueName) {
 int main() {
 	int seed = 1000;
 	int numPlayer = 2;
-	int maxBonus = 10;
-	int r;
+	//int maxBonus = 10;
+	//int r;
 	int k[10] = { minion, ambassador, tribute, gardens, mine
 			   , remodel, smithy, village, baron, great_hall };
 	struct gameState G, beforeFunction;
-	int maxHandCount = 5;
+	//int maxHandCount = 5;
 
 
 	int currentPlayer = 0;		// 0 will be player 1 and 1 will be player 2
-	int retValue;		// return value for function being tested
+	//int retValue;		// return value for function being tested
 
 
 	int tributeRevealedCards[2] = { -1, -1 };		// The enums of the revealed cards from next player
@@ -52,7 +52,7 @@ int main() {
 	memset(&G, 23, sizeof(struct gameState));
 	memset(&beforeFunction, 23, sizeof(struct gameState));
 
-	r = initializeGame(numPlayer, k, seed, &G);
+	/*r = */initializeGame(numPlayer, k, seed, &G);
 
 	G.coins = 0;			// Start at 0 in test cases for easy 
 
@@ -68,7 +68,7 @@ int main() {
 
 	// run function to test
 	
-	retValue = tributeEffect(&G, currentPlayer, nextPlayer, tributeRevealedCards);
+	/*retValue = */tributeEffect(&G, currentPlayer, nextPlayer, tributeRevealedCards);
 
 	// Assert that nothing was discarded for next player (he had no cards to begin with)
 
@@ -94,7 +94,7 @@ int main() {
 	tributeRevealedCards[0] = -1;
 	tributeRevealedCards[1] = -1;
 
-	r = initializeGame(numPlayer, k, seed, &G);
+	/*r = */initializeGame(numPlayer, k, seed, &G);
 
 	G.coins = 0;			// Start at 0 in test cases for easy 
 
@@ -117,7 +117,7 @@ int main() {
 
 	// run function to test
 	
-	retValue = tributeEffect(&G, currentPlayer, nextPlayer, tributeRevealedCards);
+	/*retValue = */tributeEffect(&G, currentPlayer, nextPlayer, tributeRevealedCards);
 
 	// Make sure the number of coins increased by 2
 
@@ -143,7 +143,7 @@ int main() {
 	tributeRevealedCards[0] = -1;
 	tributeRevealedCards[1] = -1;
 
-	r = initializeGame(numPlayer, k, seed, &G);
+	/*r = */initializeGame(numPlayer, k, seed, &G);
 
 	G.coins = 0;			// Start at 0 in test cases for easy 
 
@@ -166,7 +166,7 @@ int main() {
 
 	// run function to test
 
-	retValue = tributeEffect(&G, currentPlayer, nextPlayer, tributeRevealedCards);
+	/*retValue = */tributeEffect(&G, currentPlayer, nextPlayer, tributeRevealedCards);
 
 
 	// Assert that current player got +2 cards in hand
@@ -193,7 +193,7 @@ int main() {
 	tributeRevealedCards[0] = -1;
 	tributeRevealedCards[1] = -1;
 
-	r = initializeGame(numPlayer, k, seed, &G);
+	/*r = */initializeGame(numPlayer, k, seed, &G);
 
 	G.coins = 0;			// Start at 0 in test cases for easy 
 
@@ -217,7 +217,7 @@ int main() {
 
 	// run function to test
 
-	retValue = tributeEffect(&G, currentPlayer, nextPlayer, tributeRevealedCards);
+	/*retValue = */tributeEffect(&G, currentPlayer, nextPlayer, tributeRevealedCards);
 
 
 	// Assert the number of actions increased by 4
