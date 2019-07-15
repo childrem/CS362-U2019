@@ -26,8 +26,8 @@ void asserttrue(int actualValue, int expectedValue, char* valueName) {
 int main() {
 	int seed = 1000;
 	int numPlayer = 2;
-	int maxBonus = 10;
-	int r;
+	//int maxBonus = 10;
+	//int r;
 	int k[10] = { minion, ambassador, tribute, gardens, mine
 			   , remodel, smithy, village, baron, great_hall };
 	struct gameState G, beforeFunction;
@@ -35,7 +35,7 @@ int main() {
 
 	int choice1;
 	int currentPlayer;		// 0 will be player 1 and 1 will be player 2
-	int retValue;		// return value for function being tested
+	//int retValue;		// return value for function being tested
 
 	int handPos;		// The array position of the minion card
 
@@ -50,7 +50,7 @@ int main() {
 	memset(&G, 23, sizeof(struct gameState));
 	memset(&beforeFunction, 23, sizeof(struct gameState));
 
-	r = initializeGame(numPlayer, k, seed, &G);
+	/*r = */initializeGame(numPlayer, k, seed, &G);
 
 	G.coins = 0;			// Start at 0 in test cases for easy 
 
@@ -80,7 +80,7 @@ int main() {
 	currentPlayer = 0;
 	handPos = maxHandCount - 1;
 
-	retValue = minionEffect(choice1, &G, handPos, currentPlayer);
+	/*retValue = */minionEffect(choice1, &G, handPos, currentPlayer);
 
 
 	// Assert that the action count increased by 1
@@ -130,7 +130,7 @@ int main() {
 	memset(&G, 23, sizeof(struct gameState));
 	memset(&beforeFunction, 23, sizeof(struct gameState));
 
-	r = initializeGame(numPlayer, k, seed, &G);
+	/*r = */initializeGame(numPlayer, k, seed, &G);
 
 	G.coins = 0;			// Start at 0 in test cases for easy 
 
@@ -174,7 +174,7 @@ int main() {
 	currentPlayer = 0;
 	handPos = 0;
 
-	retValue = minionEffect(choice1, &G, handPos, currentPlayer);
+	/*retValue = */minionEffect(choice1, &G, handPos, currentPlayer);
 
 
 	// Assert that coins stayed the same
@@ -224,7 +224,7 @@ int main() {
 	memset(&G, 23, sizeof(struct gameState));
 	memset(&beforeFunction, 23, sizeof(struct gameState));
 
-	r = initializeGame(numPlayer, k, seed, &G);
+	/*r = */initializeGame(numPlayer, k, seed, &G);
 
 	G.coins = 0;			// Start at 0 in test cases for easy 
 
@@ -270,7 +270,7 @@ int main() {
 	currentPlayer = 0;
 	handPos = 0;
 
-	retValue = minionEffect(choice1, &G, handPos, currentPlayer);
+	/*retValue = */minionEffect(choice1, &G, handPos, currentPlayer);
 
 
 	// Assert that coins stayed the same
