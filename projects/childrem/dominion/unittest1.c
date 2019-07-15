@@ -26,7 +26,7 @@ void asserttrue(int actualValue, int expectedValue, char* valueName) {
 int main() {
 	int seed = 1000;
 	int numPlayer = 2;
-	int maxBonus = 10;
+	//int maxBonus = 10;
 	//int r;
 	int k[10] = { minion, ambassador, tribute, gardens, mine
 			   , remodel, smithy, village, baron, great_hall };
