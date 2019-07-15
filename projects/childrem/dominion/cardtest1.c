@@ -26,18 +26,18 @@ void asserttrue(int actualValue, int expectedValue, char* valueName) {
 int main() {
 	int seed = 1000;
 	int numPlayer = 2;
-	int maxBonus = 10;
-	int r;			// return value of function being tested
+	//int maxBonus = 10;
+	//int r;			// return value of function being tested
 	int k[10] = { minion, ambassador, tribute, gardens, mine
 			   , remodel, smithy, village, baron, great_hall };
 	struct gameState G, beforeFunction;
-	int maxHandCount = 5;
+	//int maxHandCount = 5;
 
 
 	int currentPlayer = 0;		// 0 will be player 1 and 1 will be player 2
 
 
-	int nextPlayer = currentPlayer + 1;
+	//int nextPlayer = currentPlayer + 1;
 
 
 
@@ -56,7 +56,7 @@ int main() {
 
 	// run function to test
 
-	r = initializeGame(numPlayer, k, seed, &G);
+	/*r = */initializeGame(numPlayer, k, seed, &G);
 
 
 	// Assert number of players correctly set
@@ -106,7 +106,7 @@ int main() {
 			   , remodel, smithy, village, baron, great_hall };*/
 	k[1] = minion;
 
-	r = initializeGame(numPlayer, k, seed, &G);
+	/*r = */initializeGame(numPlayer, k, seed, &G);
 
 	// Assert number of players correctly set
 
@@ -154,7 +154,7 @@ int main() {
 			   , remodel, smithy, village, baron, great_hall };*/
 	k[1] = ambassador;
 
-	r = initializeGame(numPlayer, k, seed, &G);
+	/*r = */initializeGame(numPlayer, k, seed, &G);
 
 	// Assert number of players correctly set
 
@@ -201,7 +201,7 @@ int main() {
 	/*k[10] = { minion, ambassador, tribute, gardens, mine
 			   , remodel, smithy, village, baron, great_hall };*/
 
-	r = initializeGame(numPlayer, k, seed, &G);
+	/*r = */initializeGame(numPlayer, k, seed, &G);
 
 	// Assert number of players correctly set
 
@@ -248,7 +248,7 @@ int main() {
 	/*k[10] = { minion, ambassador, tribute, gardens, mine
 			   , remodel, smithy, village, baron, great_hall };*/
 
-	r = initializeGame(numPlayer, k, seed, &G);
+	/*r = */initializeGame(numPlayer, k, seed, &G);
 
 	// Assert number of players correctly set
 
