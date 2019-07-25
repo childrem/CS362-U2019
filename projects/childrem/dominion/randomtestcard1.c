@@ -3,12 +3,13 @@
 #include <string.h>
 #include <stdio.h>
 #include <assert.h>
+#include <time.h>
+#include <stdlib.h>
 #include "rngs.h"
 
 
 #define MAXHANDCOUNT 5
 
-#define DEBUG 1
 
 int randomNumber(int minValue, int maxValue)
 {
