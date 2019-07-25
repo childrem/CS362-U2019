@@ -78,7 +78,7 @@ int baronEffect(int choice1, struct gameState *state, int currentPlayer) {
 		if (supplyCount(estate, state) > 0) {
 
 			gainCard(estate, state, 0, currentPlayer);//Gain an estate
-			//state->supplyCount[estate]--;//Decrement Estates			// BUG HERE!!!! This line should be active!
+			state->supplyCount[estate]--;//Decrement Estates			// BUG HERE!!!! This line should be active!
 
 			if (supplyCount(estate, state) == 0) {
 				isGameOver(state);
