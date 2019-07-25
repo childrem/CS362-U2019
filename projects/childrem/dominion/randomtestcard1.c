@@ -127,7 +127,7 @@ int main() {
 
 	// Change statement numTest < # to change number of tests run
 
-	for (int numTest = 0; numTest < 10; numTest++) {
+	for (int numTest = 0; numTest < 1000; numTest++) {
 		memset(&G, 23, sizeof(struct gameState));	// Clear previous gamestate
 		initializeGame(numPlayer, k, seed, &G);		// Initialize a normal game
 
@@ -138,7 +138,7 @@ int main() {
 		
 		currentPlayer = randomNumber(0, 1);	// Random value between 0 and 1
 
-		G.supplyCount[estate] = randomNumber(0, 8);	// Valid values are from 0-8 in a game with 2 players
+		G.supplyCount[estate] = randomNumber(0, 100);	// Valid values are from 0-8 in a game with 2 players
 
 		// 0-26 are valid enum values of cards in the game
 
