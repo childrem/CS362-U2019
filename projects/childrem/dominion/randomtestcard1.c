@@ -108,7 +108,7 @@ int main() {
 	srand(seed);           // initiating seed in srand
 
 	//int seed = 1000;
-	int numPlayer = 2;
+	int numPlayer = 4;
 
 	int currentPlayer;
 
@@ -137,9 +137,9 @@ int main() {
 
 		choice1 = randomNumber(0, 100);		// Random value between 0 and 100
 		
-		currentPlayer = randomNumber(0, 1);	// Random value between 0 and 1
+		currentPlayer = randomNumber(0, 3);	// Random value between 0 and 3
 
-		G.supplyCount[estate] = randomNumber(0, 100);	// Valid values are from 0-8 in a game with 2 players
+		G.supplyCount[estate] = randomNumber(0, 100);
 
 		// 0-26 are valid enum values of cards in the game
 
