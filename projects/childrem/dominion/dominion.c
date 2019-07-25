@@ -5,6 +5,7 @@
 #include <math.h>
 #include <stdlib.h>
 
+#define DEBUG 1		// To get 100% branch coverage in the baronEffect function
 
 void moveFromDiscardToDeck(struct gameState *state, int player) {
 

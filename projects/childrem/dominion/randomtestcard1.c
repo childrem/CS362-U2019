@@ -134,7 +134,7 @@ int main() {
 		// Start randomizing the necessary member variables that baronEffect uses, but keep them in
 		// ranges that would be possible for a normal game
 
-		choice1 = randomNumber(0, 1);		// Random value between 0 and 1
+		choice1 = randomNumber(0, 100);		// Random value between 0 and 100
 		
 		currentPlayer = randomNumber(0, 1);	// Random value between 0 and 1
 
