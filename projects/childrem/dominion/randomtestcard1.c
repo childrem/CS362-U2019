@@ -128,7 +128,7 @@ int main() {
 
 	// Change statement numTest < # to change number of tests run
 
-	for (int numTest = 0; numTest < 2000; numTest++) {
+	for (int numTest = 0; numTest < 5000; numTest++) {
 		memset(&G, 23, sizeof(struct gameState));	// Clear previous gamestate
 		initializeGame(numPlayer, k, seed, &G);		// Initialize a normal game
 
