@@ -104,6 +104,66 @@ void testBaronCard(int choice1, struct gameState *state, int currentPlayer) {
 
 */
 
+
+void testMinionCard(int choice1, struct gameState *state, int handPos, int currentPlayer, int numPlayer) {
+
+	// Preserve pre-function state
+
+	struct gameState beforeFunction;
+
+	memcpy(&beforeFunction, state, sizeof(struct gameState));
+
+	// Call function to test
+
+	minionEffect(choice1, state, handPos, currentPlayer);
+
+	// Change the pre-state in the way we expect minionEffect to change the actual code
+
+	beforeFunction.numActions++;
+
+	if (choice1) {
+		beforeFunction.coins += 2;
+		beforeFunction.discardCount[currentPlayer]++;	// discard the minion card itself
+		beforeFunction.handCount[currentPlayer]--;
+	}
+
+	else {
+		beforeFunction.discardCount[currentPlayer] = beforeFunction.discardCount[currentPlayer] + 
+			beforeFunction.handCount[currentPlayer];	// Player discards their hand
+		beforeFunction.handCount[currentPlayer] = 4;	// Draw 4 cards
+
+		for (int playerNum = 0; playerNum < numPlayer; playerNum++) {
+			if (playerNum != currentPlayer) {
+				if (beforeFunction.handCount[playerNum] > 4) {
+					beforeFunction.discardCount[playerNum] = beforeFunction.discardCount[playerNum] +
+						beforeFunction.handCount[playerNum];	// Player discards their hand
+					beforeFunction.handCount[playerNum] = 4;	// Draw 4 cards
+				}
+			}
+		}
+	}
+	
+	if (memcmp(&beforeFunction, state, sizeof(struct gameState)) == 0) {
+		printf("\nTest PASSED!\n");
+	}
+
+	else {
+		printf("\nTest FAILED!\n");
+		printf("Value of choice1 was: %d\n", choice1);
+		if (choice1) {
+			printResults("Discard Count Current Player", beforeFunction.discardCount[currentPlayer],
+				state->discardCount[currentPlayer]);
+		}
+
+		else {
+			
+		}
+	}
+
+
+}
+
+
 int main() {
 
 	unsigned seed;         // srand expects an unsigned integer
@@ -117,7 +177,9 @@ int main() {
 
 	int choice1;
 
-	int cardForHand;	// Randomize what card is filling the player's hand each time a test is run
+	int handPos;
+	int handCount;		// Number of cards each player has
+
 
 	int k[10] = { minion, ambassador, tribute, gardens, mine,
 				 remodel, smithy, village, baron, great_hall };
@@ -125,7 +187,7 @@ int main() {
 	struct gameState G;
 
 
-	printf("Testing function baronEffect() with RANDOM TESTS!\n");
+	printf("Testing function minionEffect() with RANDOM TESTS!\n");
 
 
 
@@ -138,25 +200,34 @@ int main() {
 		// Start randomizing the necessary member variables that baronEffect uses, but keep them in
 		// ranges that would be possible for a normal game
 
-		choice1 = randomNumber(0, 100);		// Random value between 0 and 100
+		choice1 = randomNumber(0, 5);		// Random value between 0 and 5
 
-		currentPlayer = randomNumber(0, 1);	// Random value between 0 and 1
+		currentPlayer = randomNumber(0, 3);	// Random value between 0 and 3
+		G.whoseTurn = currentPlayer;		// Have to let it know whose turn it is (player playing the card)
 
-		G.supplyCount[estate] = randomNumber(0, 100);	// Valid values are from 0-8 in a game with 2 players
+		for (int playerNum = 0; playerNum < numPlayer; playerNum++) {
+			
+			handCount = randomNumber(1, MAXHANDCOUNT);
 
-		// 0-26 are valid enum values of cards in the game
+			G.handCount[playerNum] = handCount;
 
-		cardForHand = randomNumber(0, 26);
+			// We need to make sure all player's have hands so we don't seg fault because players don't get
+			// hands until their turn comes up
 
-		// ALL cards in the player's hand are that one randomly determined card type
-
-		for (int handPosition = 0; handPosition < MAXHANDCOUNT; handPosition++) {
-			G.hand[currentPlayer][handPosition] = cardForHand;
+			for (int handPosition = 0; handPosition < handCount; handPosition++) {
+				G.hand[playerNum][handPosition] = copper;
+			}
+			
+			if (playerNum == currentPlayer) {
+				handPos = randomNumber(0, handCount);	// Position of the minion card itself
+				G.hand[playerNum][handPos] = minion;		// Force a minion into the hand
+			}
 		}
 
-		G.handCount[currentPlayer] = 5;
 
-		testBaronCard(choice1, &G, currentPlayer);
+		
+
+		testMinionCard(choice1, &G, handPos, currentPlayer, numPlayer);
 
 	}
 
