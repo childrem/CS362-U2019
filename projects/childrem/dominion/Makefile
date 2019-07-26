@@ -37,11 +37,17 @@ randomtestresults: randomtestcard1.c
 	gcc -o randomtestcard1 dominion.c rngs.c randomtestcard1.c $(CFLAGS)
 	randomtestcard1 >> randomtestresults.out
 	gcov dominion.c -b -f >> randomtestresults.out
+	gcov dominion.c -b -f >> baronCoverage.out
 	gcc -o randomtestcard2 dominion.c rngs.c randomtestcard2.c $(CFLAGS)
 	randomtestcard2 >> randomtestresults.out
 	gcov dominion.c -b -f >> randomtestresults.out
+	gcov dominion.c -b -f >> minionCoverage.out
+	gcc -o randomtestcard3 dominion.c rngs.c randomtestcard3.c $(CFLAGS)
+	randomtestcard3 >> randomtestresults.out
+	gcov dominion.c -b -f >> randomtestresults.out
+	gcov dominion.c -b -f >> tributeCoverage.out
 
 all: playdom player 
 
 clean:
-	rm -f *.o playdom.exe playdom player player.exe  *.gcov *.gcda *.gcno *.so *.out testDrawCard testDrawCard.exe randomtestcard1 randomtestcard2
+	rm -f *.o playdom.exe playdom player player.exe  *.gcov *.gcda *.gcno *.so *.out testDrawCard testDrawCard.exe randomtestcard1 randomtestcard2 randomtestcard3
