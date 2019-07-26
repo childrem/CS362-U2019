@@ -63,9 +63,6 @@ void testTributeCard(struct gameState *state, int currentPlayer, int nextPlayer,
 
 		if (beforeFunction.deckCount[nextPlayer] < 2) {
 
-			moveFromDiscardToDeck(&beforeFunction, nextPlayer);	// Move cards from discard pile to the deck
-
-
 			// Deck is shuffled by the function, we have to trust the results of shuffle fxn because of RNG
 
 			for (int deckPosition = 0; deckPosition < state->deckCount[nextPlayer]; deckPosition++) {
@@ -87,7 +84,7 @@ void testTributeCard(struct gameState *state, int currentPlayer, int nextPlayer,
 		tributeRevealedCards[1] = -1;
 	}
 
-	for (int i = 0; i <= 2; i++) {
+	for (int i = 0; i < 2; i++) {
 
 		if (tributeRevealedCards[i] == copper || tributeRevealedCards[i] == silver || tributeRevealedCards[i] == gold) {//Treasure cards
 			beforeFunction.coins += 2;
@@ -95,7 +92,9 @@ void testTributeCard(struct gameState *state, int currentPlayer, int nextPlayer,
 			addToDiscardCards(&beforeFunction, nextPlayer, tributeRevealedCards[i]);
 		}
 
-		else if (tributeRevealedCards[i] == estate || tributeRevealedCards[i] == duchy || tributeRevealedCards[i] == province || tributeRevealedCards[i] == gardens || tributeRevealedCards[i] == great_hall) {//Victory Card Found
+		else if (tributeRevealedCards[i] == estate || tributeRevealedCards[i] == duchy || 
+			tributeRevealedCards[i] == province || tributeRevealedCards[i] == gardens || 
+			tributeRevealedCards[i] == great_hall) {//Victory Card Found
 			
 			// Current player draws 2 cards which potentially involves RNG. Need to trust results
 			
@@ -105,6 +104,10 @@ void testTributeCard(struct gameState *state, int currentPlayer, int nextPlayer,
 
 			// CALL NEW FXN HERE TO ADD THIS CARD TO DISCARD PILE OF "NEXT PLAYER"
 			addToDiscardCards(&beforeFunction, nextPlayer, tributeRevealedCards[i]);
+
+			beforeFunction.handCount[currentPlayer] += 2;
+			beforeFunction.deckCount[currentPlayer] -= 2;
+
 		}
 		else {//Action Card
 			if (tributeRevealedCards[i] != -1) {
@@ -121,108 +124,21 @@ void testTributeCard(struct gameState *state, int currentPlayer, int nextPlayer,
 
 	else {
 		printf("\nTest FAILED!\n");
+		printf("Value of revealed card 1: %d\n", tributeRevealedCards[0]);
+		printf("Value of revealed card 2: %d\n", tributeRevealedCards[1]);
+
+		printResults("Deck Count Next Player", beforeFunction.deckCount[nextPlayer], state->deckCount[nextPlayer]);
+		printResults("Deck Count Current Player", beforeFunction.deckCount[currentPlayer], state->deckCount[currentPlayer]);
+		printResults("Number of Coins", beforeFunction.coins, state->coins);
+		printResults("Current Player Hand Count", beforeFunction.handCount[currentPlayer],
+			state->handCount[currentPlayer]);
+		printResults("Number of Action", beforeFunction.numActions, state->numActions);
+		
 	}
 
 
 }
 
-/*
-
-void testMinionCard(int choice1, struct gameState *state, int handPos, int currentPlayer, int numPlayer) {
-
-	// Preserve pre-function state
-
-	struct gameState beforeFunction;
-
-	memcpy(&beforeFunction, state, sizeof(struct gameState));
-
-	// Call function to test
-
-	minionEffect(choice1, state, handPos, currentPlayer);
-
-	// Change the pre-state in the way we expect minionEffect to change the actual code
-
-	beforeFunction.numActions++;
-
-	if (choice1) {
-		beforeFunction.coins += 2;
-
-		// Since this is not a test of discardCard's functionality, I am trusting the functionality of this function
-		// and therefore not manually changing everything that it changes
-
-		discardCard(handPos, currentPlayer, &beforeFunction, 0);
-	}
-
-	else {
-		while (beforeFunction.handCount[currentPlayer] > 0) {
-			discardCard(handPos, currentPlayer, &beforeFunction, 0);
-		}
-
-		// We don't have control over the random number generation of draw card so I'm trusting these values
-		// Draw 4 cards
-
-		for (int handPosition = 0; handPosition < 4; handPosition++) {
-			beforeFunction.hand[currentPlayer][handPosition] = state->hand[currentPlayer][handPosition];
-		}
-
-		beforeFunction.handCount[currentPlayer] = 4;
-
-		// Everyone with more than 4 cards discards their current hand and should then have a hand count of 4
-
-		for (int playerNum = 0; playerNum < numPlayer; playerNum++) {
-			if (playerNum != currentPlayer) {
-				if (beforeFunction.handCount[playerNum] > 4) {	// They have to discard their hand
-
-					while (beforeFunction.handCount[playerNum] > 0) {
-						discardCard(handPos, playerNum, &beforeFunction, 0);
-					}
-
-
-					for (int handPosition = 0; handPosition < 4; handPosition++) {
-						beforeFunction.hand[playerNum][handPosition] = state->hand[playerNum][handPosition];
-					}
-
-					beforeFunction.handCount[playerNum] = 4;
-
-				}
-			}
-		}
-	}
-
-	if (memcmp(&beforeFunction, state, sizeof(struct gameState)) == 0) {
-		printf("\nTest PASSED!\n");
-		printf("Value of choice1 was: %d\n", choice1);
-	}
-
-	else {
-		printf("\nTest FAILED!\n");
-		printf("Value of choice1 was: %d\n", choice1);
-		printResults("Number of Actions", beforeFunction.numActions, state->numActions);
-		if (choice1) {
-			printResults("Played Card Enum Value", minion, state->playedCards[state->playedCardCount - 1]);
-			printResults("Number of Coins", beforeFunction.coins, state->coins);
-			printResults("Hand Count Current Player", beforeFunction.handCount[currentPlayer],
-				state->handCount[currentPlayer]);
-		}
-
-		else {
-			printResults("Played Card Enum Value", minion, state->playedCards[0]);
-			printResults("Hand Count Current Player", beforeFunction.handCount[currentPlayer],
-				state->handCount[currentPlayer]);
-			for (int playerNum = 0; playerNum < numPlayer; playerNum++) {
-				if (playerNum != currentPlayer) {
-					printResults("Hand Count of Other Player", beforeFunction.handCount[playerNum],
-						state->handCount[playerNum]);
-				}
-			}
-
-		}
-	}
-
-
-}
-
-*/
 
 int main() {
 
@@ -249,8 +165,6 @@ int main() {
 
 	struct gameState G;
 
-	//tributeEffect(struct gameState *state, int currentPlayer, int nextPlayer, int* tributeRevealedCards)
-
 
 	printf("Testing function tributeEffect() with RANDOM TESTS!\n");
 
@@ -258,7 +172,7 @@ int main() {
 
 	// Change statement numTest < # to change number of tests run
 
-	for (int numTest = 0; numTest < 10; numTest++) {
+	for (int numTest = 0; numTest < 5000; numTest++) {
 		memset(&G, 23, sizeof(struct gameState));	// Clear previous gamestate
 		initializeGame(numPlayer, k, seed, &G);		// Initialize a normal game
 
