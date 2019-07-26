@@ -37,8 +37,11 @@ randomtestresults: randomtestcard1.c
 	gcc -o randomtestcard1 dominion.c rngs.c randomtestcard1.c $(CFLAGS)
 	randomtestcard1 >> randomtestresults.out
 	gcov dominion.c -b -f >> randomtestresults.out
+	gcc -o randomtestcard2 dominion.c rngs.c randomtestcard2.c $(CFLAGS)
+	randomtestcard2 >> randomtestresults.out
+	gcov dominion.c -b -f >> randomtestresults.out
 
 all: playdom player 
 
 clean:
-	rm -f *.o playdom.exe playdom player player.exe  *.gcov *.gcda *.gcno *.so *.out testDrawCard testDrawCard.exe
+	rm -f *.o playdom.exe playdom player player.exe  *.gcov *.gcda *.gcno *.so *.out testDrawCard testDrawCard.exe randomtestcard1 randomtestcard2
