@@ -31,79 +31,6 @@ void printResults(char* valueName, int expected, int actual) {
 
 }
 
-/*
-
-void testBaronCard(int choice1, struct gameState *state, int currentPlayer) {
-
-	// Preserve pre-function state
-
-	struct gameState beforeFunction;
-
-	memcpy(&beforeFunction, state, sizeof(struct gameState));
-
-	// Call function to test
-
-	baronEffect(choice1, state, currentPlayer);
-
-	// Change the pre-state in the way we expect baronEffect to change the actual code
-
-	beforeFunction.numBuys++;
-
-	if (choice1 > 0) {
-		// We set ALL cards in the player's hand to a certain value, the first card baronEffect would see would be
-		// position 0
-		if (beforeFunction.hand[currentPlayer][0] == estate) {
-			beforeFunction.coins += 4;
-			beforeFunction.handCount[currentPlayer]--;
-			beforeFunction.discardCount[currentPlayer]++;
-		}
-
-		// This else will handle both the situation where the player's hand had no estate
-		else {
-			if (beforeFunction.supplyCount[estate] > 0) {
-				beforeFunction.discardCount[currentPlayer]++;	// Estate gets added to discard pile
-				beforeFunction.discard[currentPlayer][beforeFunction.discardCount[currentPlayer] - 1] = estate;
-				beforeFunction.supplyCount[estate]--;
-			}
-		}
-
-
-	}
-
-	else {
-		if (beforeFunction.supplyCount[estate] > 0) {
-			beforeFunction.discardCount[currentPlayer]++;	// Estate gets added to discard pile
-			beforeFunction.discard[currentPlayer][beforeFunction.discardCount[currentPlayer] - 1] = estate;
-			beforeFunction.supplyCount[estate]--;
-		}
-	}
-
-	// If there were no estates in the supply, the before state should equal the after state when choice1 is 0 or the
-	// hand didn't have estate cards in it.  So no alteration needed for that case.
-
-	if (memcmp(&beforeFunction, state, sizeof(struct gameState)) == 0) {
-		printf("\nTest PASSED!\n");
-		//printf("Enum of Card in hand was: %d\n", state->hand[currentPlayer][0]);
-	}
-
-	else {
-		printf("\nTest FAILED!\n");
-		printf("Enum of Card in hand was: %d\n", state->hand[currentPlayer][0]);
-		printf("Value of choice1 was: %d\n", choice1);
-		printResults("Num Coins", beforeFunction.coins, state->coins);
-		printResults("Hand Count", beforeFunction.handCount[currentPlayer], state->handCount[currentPlayer]);
-		printResults("Discard Count", beforeFunction.discardCount[currentPlayer], state->discardCount[currentPlayer]);
-		printResults("Number of Buys", beforeFunction.numBuys, state->numBuys);
-		printResults("Estate Supply Count", beforeFunction.supplyCount[estate], state->supplyCount[estate]);
-		printResults("Card Added to Discard Pile",
-			beforeFunction.discard[currentPlayer][beforeFunction.discardCount[currentPlayer] - 1],
-			state->discard[currentPlayer][state->discardCount[currentPlayer] - 1]);
-	}
-
-}
-
-*/
-
 
 void testMinionCard(int choice1, struct gameState *state, int handPos, int currentPlayer, int numPlayer) {
 
@@ -123,21 +50,44 @@ void testMinionCard(int choice1, struct gameState *state, int handPos, int curre
 
 	if (choice1) {
 		beforeFunction.coins += 2;
-		beforeFunction.discardCount[currentPlayer]++;	// discard the minion card itself
-		beforeFunction.handCount[currentPlayer]--;
+
+		// Since this is not a test of discardCard's functionality, I am trusting the functionality of this function
+		// and therefore not manually changing everything that it changes
+
+		discardCard(handPos, currentPlayer, &beforeFunction, 0);
 	}
 
 	else {
-		beforeFunction.discardCount[currentPlayer] = beforeFunction.discardCount[currentPlayer] + 
-			beforeFunction.handCount[currentPlayer];	// Player discards their hand
-		beforeFunction.handCount[currentPlayer] = 4;	// Draw 4 cards
+		while (beforeFunction.handCount[currentPlayer] > 0) {
+			discardCard(handPos, currentPlayer, &beforeFunction, 0);
+		}
+
+		// We don't have control over the random number generation of draw card so I'm trusting these values
+		// Draw 4 cards
+
+		for (int handPosition = 0; handPosition < 4; handPosition++) {
+			beforeFunction.hand[currentPlayer][handPosition] = state->hand[currentPlayer][handPosition];
+		}
+
+		beforeFunction.handCount[currentPlayer] = 4;
+
+		// Everyone with more than 4 cards discards their current hand and should then have a hand count of 4
 
 		for (int playerNum = 0; playerNum < numPlayer; playerNum++) {
 			if (playerNum != currentPlayer) {
-				if (beforeFunction.handCount[playerNum] > 4) {
-					beforeFunction.discardCount[playerNum] = beforeFunction.discardCount[playerNum] +
-						beforeFunction.handCount[playerNum];	// Player discards their hand
-					beforeFunction.handCount[playerNum] = 4;	// Draw 4 cards
+				if (beforeFunction.handCount[playerNum] > 4) {	// They have to discard their hand
+					
+					while (beforeFunction.handCount[playerNum] > 0) {
+						discardCard(handPos, playerNum, &beforeFunction, 0);
+					}
+
+
+					for (int handPosition = 0; handPosition < 4; handPosition++) {
+						beforeFunction.hand[playerNum][handPosition] = state->hand[playerNum][handPosition];
+					}
+
+					beforeFunction.handCount[playerNum] = 4;
+
 				}
 			}
 		}
@@ -145,18 +95,31 @@ void testMinionCard(int choice1, struct gameState *state, int handPos, int curre
 	
 	if (memcmp(&beforeFunction, state, sizeof(struct gameState)) == 0) {
 		printf("\nTest PASSED!\n");
+		printf("Value of choice1 was: %d\n", choice1);
 	}
 
 	else {
 		printf("\nTest FAILED!\n");
 		printf("Value of choice1 was: %d\n", choice1);
+		printResults("Number of Actions", beforeFunction.numActions, state->numActions);
 		if (choice1) {
-			printResults("Discard Count Current Player", beforeFunction.discardCount[currentPlayer],
-				state->discardCount[currentPlayer]);
+			printResults("Played Card Enum Value", minion, state->playedCards[state->playedCardCount - 1]);
+			printResults("Number of Coins", beforeFunction.coins, state->coins);
+			printResults("Hand Count Current Player", beforeFunction.handCount[currentPlayer], 
+				state->handCount[currentPlayer]);
 		}
 
 		else {
-			
+			printResults("Played Card Enum Value", minion, state->playedCards[0]);
+			printResults("Hand Count Current Player", beforeFunction.handCount[currentPlayer], 
+				state->handCount[currentPlayer]);
+			for (int playerNum = 0; playerNum < numPlayer; playerNum++) {
+				if (playerNum != currentPlayer) {
+					printResults("Hand Count of Other Player", beforeFunction.handCount[playerNum],
+						state->handCount[playerNum]);
+				}
+			}
+
 		}
 	}
 
