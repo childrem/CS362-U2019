@@ -32,6 +32,102 @@ void printResults(char* valueName, int expected, int actual) {
 }
 
 
+void testTributeCard(struct gameState *state, int currentPlayer, int nextPlayer, int* tributeRevealedCards) {
+
+	// Preserve pre-function state
+
+	struct gameState beforeFunction;
+
+	memcpy(&beforeFunction, state, sizeof(struct gameState));
+
+	// Call function to test
+
+	tributeEffect(state, currentPlayer, nextPlayer, tributeRevealedCards);
+
+	// Change the pre-state in the way we expect minionEffect to change the actual code
+
+	if ((beforeFunction.discardCount[nextPlayer] + beforeFunction.deckCount[nextPlayer]) <= 1) {
+
+		if (beforeFunction.deckCount[nextPlayer] > 0) {
+			tributeRevealedCards[0] = beforeFunction.deck[nextPlayer][beforeFunction.deckCount[nextPlayer] - 1];
+			beforeFunction.deckCount[nextPlayer]--;
+		}
+
+		else if (beforeFunction.discardCount[nextPlayer] > 0) {
+			tributeRevealedCards[0] = beforeFunction.discard[nextPlayer][beforeFunction.discardCount[nextPlayer] - 1];
+		}
+
+	}
+
+	else {
+
+		if (beforeFunction.deckCount[nextPlayer] < 2) {
+
+			moveFromDiscardToDeck(&beforeFunction, nextPlayer);	// Move cards from discard pile to the deck
+
+
+			// Deck is shuffled by the function, we have to trust the results of shuffle fxn because of RNG
+
+			for (int deckPosition = 0; deckPosition < state->deckCount[nextPlayer]; deckPosition++) {
+				beforeFunction.deck[nextPlayer][deckPosition] = state->deck[nextPlayer][deckPosition];
+			}
+
+		}
+
+		tributeRevealedCards[0] = beforeFunction.deck[nextPlayer][beforeFunction.deckCount[nextPlayer] - 1];
+		beforeFunction.deck[nextPlayer][beforeFunction.deckCount[nextPlayer] - 1] = -1;
+		tributeRevealedCards[1] = beforeFunction.deck[nextPlayer][beforeFunction.deckCount[nextPlayer] - 2];
+		beforeFunction.deck[nextPlayer][beforeFunction.deckCount[nextPlayer] - 2] = -1;
+		beforeFunction.deckCount[nextPlayer] -= 2;
+	}
+
+	if (tributeRevealedCards[0] == tributeRevealedCards[1]) {//If we have a duplicate card, just drop one 
+		// CALL NEW FXN HERE TO ADD THIS CARD TO DISCARD PILE OF "NEXT PLAYER"
+		addToDiscardCards(&beforeFunction, nextPlayer, tributeRevealedCards[1]);
+		tributeRevealedCards[1] = -1;
+	}
+
+	for (int i = 0; i <= 2; i++) {
+
+		if (tributeRevealedCards[i] == copper || tributeRevealedCards[i] == silver || tributeRevealedCards[i] == gold) {//Treasure cards
+			beforeFunction.coins += 2;
+			// CALL NEW FXN HERE TO ADD THIS CARD TO DISCARD PILE OF "NEXT PLAYER"
+			addToDiscardCards(&beforeFunction, nextPlayer, tributeRevealedCards[i]);
+		}
+
+		else if (tributeRevealedCards[i] == estate || tributeRevealedCards[i] == duchy || tributeRevealedCards[i] == province || tributeRevealedCards[i] == gardens || tributeRevealedCards[i] == great_hall) {//Victory Card Found
+			
+			// Current player draws 2 cards which potentially involves RNG. Need to trust results
+			
+			for (int handPosition = 0; handPosition < state->handCount[currentPlayer]; handPosition++) {
+				beforeFunction.hand[currentPlayer][handPosition] = state->hand[currentPlayer][handPosition];
+			}
+
+			// CALL NEW FXN HERE TO ADD THIS CARD TO DISCARD PILE OF "NEXT PLAYER"
+			addToDiscardCards(&beforeFunction, nextPlayer, tributeRevealedCards[i]);
+		}
+		else {//Action Card
+			if (tributeRevealedCards[i] != -1) {
+				beforeFunction.numActions = beforeFunction.numActions + 2;
+				// CALL NEW FXN HERE TO ADD THIS CARD TO DISCARD PILE OF "NEXT PLAYER"
+				addToDiscardCards(&beforeFunction, nextPlayer, tributeRevealedCards[i]);
+			}
+		}
+	}
+
+	if (memcmp(&beforeFunction, state, sizeof(struct gameState)) == 0) {
+		printf("\nTest PASSED!\n");
+	}
+
+	else {
+		printf("\nTest FAILED!\n");
+	}
+
+
+}
+
+/*
+
 void testMinionCard(int choice1, struct gameState *state, int handPos, int currentPlayer, int numPlayer) {
 
 	// Preserve pre-function state
@@ -126,6 +222,7 @@ void testMinionCard(int choice1, struct gameState *state, int handPos, int curre
 
 }
 
+*/
 
 int main() {
 
@@ -137,11 +234,14 @@ int main() {
 	int numPlayer = 4;
 
 	int currentPlayer;
+	int nextPlayer;
 
-	int choice1;
+	int tributeRevealedCards[2] = { -1,-1 };	// enum values set by tributeEffect function
 
-	int handPos;
+	//int handPos;
 	int handCount;		// Number of cards each player has
+	int deckCount;		// Number of cards in each player's deck
+	int discardCount;	// Number of cards in each player's discard pile
 
 
 	int k[10] = { minion, ambassador, tribute, gardens, mine,
@@ -149,28 +249,37 @@ int main() {
 
 	struct gameState G;
 
+	//tributeEffect(struct gameState *state, int currentPlayer, int nextPlayer, int* tributeRevealedCards)
 
-	printf("Testing function minionEffect() with RANDOM TESTS!\n");
+
+	printf("Testing function tributeEffect() with RANDOM TESTS!\n");
 
 
 
 	// Change statement numTest < # to change number of tests run
 
-	for (int numTest = 0; numTest < 1000; numTest++) {
+	for (int numTest = 0; numTest < 10; numTest++) {
 		memset(&G, 23, sizeof(struct gameState));	// Clear previous gamestate
 		initializeGame(numPlayer, k, seed, &G);		// Initialize a normal game
 
-		// Start randomizing the necessary member variables that baronEffect uses, but keep them in
-		// ranges that would be possible for a normal game
+		// Start randomizing the necessary member variables that tributeEffect uses
 
-		choice1 = randomNumber(0, 5);		// Random value between 0 and 5
 
 		currentPlayer = randomNumber(0, 3);	// Random value between 0 and 3
 		G.whoseTurn = currentPlayer;		// Have to let it know whose turn it is (player playing the card)
 
+		if (currentPlayer == numPlayer - 1) {
+			nextPlayer = 0;
+		}
+
+		else {
+			nextPlayer = currentPlayer + 1;
+		}
+
+
 		for (int playerNum = 0; playerNum < numPlayer; playerNum++) {
 
-			handCount = randomNumber(1, MAXHANDCOUNT);
+			handCount = randomNumber(1, MAX_HAND);
 
 			G.handCount[playerNum] = handCount;
 
@@ -178,19 +287,37 @@ int main() {
 			// hands until their turn comes up
 
 			for (int handPosition = 0; handPosition < handCount; handPosition++) {
-				G.hand[playerNum][handPosition] = copper;
+				G.hand[playerNum][handPosition] = randomNumber(0, 26);		
+				// Each hand is totally randomized in size and what cards are present
 			}
 
 			if (playerNum == currentPlayer) {
-				handPos = randomNumber(0, handCount);	// Position of the minion card itself
-				G.hand[playerNum][handPos] = minion;		// Force a minion into the hand
+				int handPos = randomNumber(0, handCount);	// Position of the minion card itself
+				G.hand[playerNum][handPos] = tribute;		// Force a tribute into the hand
 			}
+
+			deckCount = randomNumber(0, MAX_DECK);
+			discardCount = randomNumber(0, MAX_DECK);
+
+			G.deckCount[playerNum] = deckCount;
+			G.discardCount[playerNum] = discardCount;
+
+			for (int deckPosition = 0; deckPosition < deckCount; deckPosition++) {
+				G.deck[playerNum][deckPosition] = randomNumber(0, 26);
+				// Each player's deck is totally random in size and what cards are present
+			}
+
+			for (int discardPosition = 0; discardPosition < discardCount; discardPosition++) {
+				G.discard[playerNum][discardPosition] = randomNumber(0, 26);
+				// Each player's discard pile is totally random in size and what cards are present
+			}
+
 		}
 
 
+		testTributeCard(&G, currentPlayer, nextPlayer, tributeRevealedCards);
 
 
-		testMinionCard(choice1, &G, handPos, currentPlayer, numPlayer);
 
 	}
 
