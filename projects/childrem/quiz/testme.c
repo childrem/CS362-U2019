@@ -1,18 +1,79 @@
+// Michael Childress
+// CS 362 Software Engineering II
+// Random Testing Quiz
+
+
 #include<stdio.h>
 #include<string.h>
 #include<stdlib.h>
 #include<time.h>
 
+
+
 char inputChar()
 {
-    // TODO: rewrite this function
-    return ' ';
+
+	// Generate a random character with ASCII value between 32 and 125
+	// All of the necessary characters we need for our logic branches fall in this range
+
+	int randomNumber;
+	const int MIN_VALUE = 32;		// ASCII value of SPACE character
+	const int MAX_VALUE = 125;		// ASCII value of } character
+
+	randomNumber = (rand() % (MAX_VALUE - MIN_VALUE + 1)) + MIN_VALUE;
+
+
+    return (char)randomNumber;			// Return the character represented by that ASCII code
 }
 
 char *inputString()
 {
-    // TODO: rewrite this function
-    return "";
+
+	// I am deciding to fix my string length to 5 letters and 1 null terminator because of how hard
+	// it will be to hit the right randomization of letters to form "reset"
+	// I am also going to fix the last position of the string as a null terminator
+	// I am further restricting the input pool to just the letters in the word "reset" as including
+	// all lowercase letters proved too difficult to achieve hitting the word reset.
+
+	int randomNumber;
+	const int MIN_VALUE = 1;			// These values will be used to determine what letter gets added
+	const int MAX_VALUE = 4;	
+
+	int stringLength = 6;
+
+	char charToAdd;
+
+	static char stringToReturn[6];	// Room for 5 letters and 1 null terminator
+
+	// clear memory used by this string
+
+	memset(stringToReturn, '\0', sizeof(stringToReturn));
+
+	for (int stringPos = 0; stringPos < stringLength - 1; stringPos++) {
+
+		randomNumber = (rand() % (MAX_VALUE - MIN_VALUE + 1)) + MIN_VALUE;
+
+		if (randomNumber == 1) {
+			charToAdd = 'r';
+		}
+
+		else if (randomNumber == 2) {
+			charToAdd = 'e';
+		}
+
+		else if (randomNumber == 3) {
+			charToAdd = 's';
+		}
+
+		else if (randomNumber == 4) {
+			charToAdd = 't';
+		}
+
+		stringToReturn[stringPos] = charToAdd;
+	}
+
+
+    return stringToReturn;
 }
 
 void testme()
