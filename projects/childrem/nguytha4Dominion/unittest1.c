@@ -35,6 +35,8 @@ int main() {
 
 	int choice1;
 	int currentPlayer;		// 0 will be player 1 and 1 will be player 2
+	int handPos;
+
 	//int retValue;		// return value for function being tested
 
 	int numEstates;		// Will count number of estates in a player's hand
@@ -76,14 +78,21 @@ int main() {
 
 	}
 
+
 	// capture initial state of the game
 	memcpy(&beforeFunction, &G, sizeof(struct gameState));
 
 	// run function to test
 	choice1 = 1;
 	currentPlayer = 0;
+
+	handPos = G.handCount[currentPlayer] - 1;
+
+	G.hand[currentPlayer][handPos] = baron;
 	
-	/*retValue = */baronEffect(choice1, &G, currentPlayer);
+	//baron_refactor(int choice1, struct gameState *state, int handPos)
+
+	/*retValue = */baron_refactor(choice1, &G, handPos);
 
 
 	// compare number of coins expected vs actual
@@ -171,7 +180,11 @@ int main() {
 	choice1 = 0;
 	currentPlayer = 0;
 
-	/*retValue = */baronEffect(choice1, &G, currentPlayer);
+	handPos = G.handCount[currentPlayer] - 1;
+
+	G.hand[currentPlayer][handPos] = baron;
+
+	/*retValue = */baron_refactor(choice1, &G, handPos);
 
 
 	// compare number of coins expected vs actual
