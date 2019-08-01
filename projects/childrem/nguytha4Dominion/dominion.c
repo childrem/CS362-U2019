@@ -1022,7 +1022,7 @@ void baron_refactor(int choice1, struct gameState *state, int handPos) {
 		for (i = 0; i < state->handCount[currentPlayer]; i++) {
 					
 			// If estate has been found
-			if (state->hand[currentPlayer][i] = estate){
+			if (state->hand[currentPlayer][i] = estate){		// BUG HERE!!!! Only 1 equals sign is used instead of 2. It's changing [i] to estate
 				
 				// Discard it
 				state->discard[currentPlayer][state->discardCount[currentPlayer]] = state->hand[currentPlayer][i]; 

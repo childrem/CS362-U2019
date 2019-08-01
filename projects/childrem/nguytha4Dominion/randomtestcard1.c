@@ -31,7 +31,7 @@ void printResults(char* valueName, int expected, int actual) {
 }
 
 
-void testBaronCard(int choice1, struct gameState *state, int currentPlayer) {
+void testBaronCard(int choice1, struct gameState *state, int currentPlayer, int handPos) {
 
 	// Preserve pre-function state
 
@@ -41,7 +41,9 @@ void testBaronCard(int choice1, struct gameState *state, int currentPlayer) {
 
 	// Call function to test
 
-	baronEffect(choice1, state, currentPlayer);
+	baron_refactor(choice1, state, handPos);
+
+	//baronEffect(choice1, state, currentPlayer);
 
 	// Change the pre-state in the way we expect baronEffect to change the actual code
 
@@ -86,9 +88,15 @@ void testBaronCard(int choice1, struct gameState *state, int currentPlayer) {
 
 	else {
 		printf("\nTest FAILED!\n");
-		printf("Enum of Card in hand was: %d\n", state->hand[currentPlayer][0]);
+		//printf("Enum of Card in hand was: %d\n", state->hand[currentPlayer][0]);
 		printf("Value of choice1 was: %d\n", choice1);
-		printResults("Num Coins", beforeFunction.coins, state->coins);
+		if (choice1 != 0) {
+			printResults("Num Coins", beforeFunction.coins + 4, state->coins);
+		}
+		else {
+			printResults("Num Coins", beforeFunction.coins, state->coins);
+		}
+
 		printResults("Hand Count", beforeFunction.handCount[currentPlayer], state->handCount[currentPlayer]);
 		printResults("Discard Count", beforeFunction.discardCount[currentPlayer], state->discardCount[currentPlayer]);
 		printResults("Number of Buys", beforeFunction.numBuys, state->numBuys);
@@ -96,6 +104,7 @@ void testBaronCard(int choice1, struct gameState *state, int currentPlayer) {
 		printResults("Card Added to Discard Pile",
 			beforeFunction.discard[currentPlayer][beforeFunction.discardCount[currentPlayer] - 1],
 			state->discard[currentPlayer][state->discardCount[currentPlayer] - 1]);
+		printResults("Played Card Count", beforeFunction.playedCardCount + 1, state->playedCardCount);
 	}
 
 }
@@ -115,6 +124,9 @@ int main() {
 	int choice1;
 
 	int cardForHand;	// Randomize what card is filling the player's hand each time a test is run
+
+	int numBarons;
+	int handPos;
 
 	int k[10] = { minion, ambassador, tribute, gardens, mine,
 				 remodel, smithy, village, baron, great_hall };
@@ -147,13 +159,25 @@ int main() {
 
 		// ALL cards in the player's hand are that one randomly determined card type
 
+		numBarons = randomNumber(1, 4);		// Random number of barons
+
 		for (int handPosition = 0; handPosition < MAXHANDCOUNT; handPosition++) {
-			G.hand[currentPlayer][handPosition] = cardForHand;
+			if (numBarons > 0) {
+				G.hand[currentPlayer][handPosition] = baron;
+				numBarons--;
+			}
+
+			else {
+				G.hand[currentPlayer][handPosition] = cardForHand;
+			}
 		}
 
 		G.handCount[currentPlayer] = 5;
 
-		testBaronCard(choice1, &G, currentPlayer);
+		handPos = 0;	// Always guaranteed a baron at position 0
+
+
+		testBaronCard(choice1, &G, currentPlayer, handPos);
 
 	}
 
