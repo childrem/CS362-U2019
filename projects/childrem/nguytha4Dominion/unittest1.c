@@ -72,7 +72,7 @@ int main() {
 			}
 
 			else {
-				G.hand[c][handPosition] = copper;
+				G.hand[c][handPosition] = baron;
 			}
 		}
 
@@ -88,7 +88,10 @@ int main() {
 
 	handPos = G.handCount[currentPlayer] - 1;
 
-	G.hand[currentPlayer][handPos] = baron;
+	//G.hand[currentPlayer][handPos] = baron;
+
+	//G.hand[currentPlayer][handPos - 1] = baron;
+
 	
 	//baron_refactor(int choice1, struct gameState *state, int handPos)
 
@@ -140,6 +143,13 @@ int main() {
 	asserttrue(G.discardCount[currentPlayer + 1], beforeFunction.discardCount[currentPlayer + 1], 
 		"Other Player Discard Count");
 
+	// ADDED for assignment 5
+	// Check to see if having 2 baron cards does anything (should be discarding 1 estate and putting 1 baron in played cards)
+
+	asserttrue(G.discardCount[currentPlayer], beforeFunction.discardCount[currentPlayer] + 1, 
+		"Discard count of current player");
+
+	asserttrue(G.playedCardCount, beforeFunction.playedCardCount + 1, "Played Card Count");
 
 
 	// TEST 2 -- choice1 is NOT set -- currentPlayer should be gaining an estate (coins should remain the same)
@@ -167,7 +177,7 @@ int main() {
 			}
 
 			else {
-				G.hand[c][handPosition] = copper;
+				G.hand[c][handPosition] = baron;
 			}
 		}
 
@@ -182,7 +192,9 @@ int main() {
 
 	handPos = G.handCount[currentPlayer] - 1;
 
-	G.hand[currentPlayer][handPos] = baron;
+	// Testing the case where we have multiple barons and multiple estates
+
+	G.hand[currentPlayer][handPos] = estate;
 
 	/*retValue = */baron_refactor(choice1, &G, handPos);
 
@@ -230,7 +242,7 @@ int main() {
 	asserttrue(G.discardCount[currentPlayer + 1], beforeFunction.discardCount[currentPlayer + 1],
 		"Other Player Discard Count");
 
-
+	asserttrue(G.playedCardCount, beforeFunction.playedCardCount + 1, "Played Card Count");
 	
 
 	printf("\nEnd of Unit Test!\n");

@@ -1035,7 +1035,7 @@ void baron_refactor(int choice1, struct gameState *state, int handPos) {
 				// Discard the baron card as played
 				for (i = 0; i < state->handCount[currentPlayer]; i++) {
 		
-					if (state->hand[currentPlayer][i] == playedCard)
+					if (state->hand[currentPlayer][i] == playedCard)		// BUG HERE, if two barons, both will go
 						discardCard(i, currentPlayer, state, 0);
 				}
 				
@@ -1058,7 +1058,7 @@ void baron_refactor(int choice1, struct gameState *state, int handPos) {
 	}
 
 	// Discard the baron card as played
-	for (i = 0; i < state->handCount[currentPlayer]; i++) {
+	for (i = 0; i < state->handCount[currentPlayer]; i++) {		// BUG HERE, if two barons, both will go
 		
 		if (state->hand[currentPlayer][i] == playedCard)
 			discardCard(i, currentPlayer, state, 0);
