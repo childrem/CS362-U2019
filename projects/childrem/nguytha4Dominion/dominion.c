@@ -880,6 +880,8 @@ void ambassador_refactor(int choice1, int choice2, struct gameState *state, int 
 	int returnCards = 0;									// To count the number of cards in player's hand that they want to return
 	int choice1Card = state->hand[currentPlayer][choice1];	// Remember the choice1 card to keep track even after trashing cards
 	int playedCard = state->hand[currentPlayer][choice1];	// To keep track of the ambassador card to discard after
+
+	// BUG HERE!!!  playedCard should be set to state->hand[currentPlayer][handPos]
 	
 	// If the player chooses to return a number of cards that isn't 0, 1, or 2, return from the function
 	if (choice2 > 2 || choice2 < 0)
@@ -893,7 +895,7 @@ void ambassador_refactor(int choice1, int choice2, struct gameState *state, int 
 	// Check to see if the current player has enough of the cards that he/she chose to return
 	for (i = 0; i < state->handCount[currentPlayer]; i++) {
 				
-		if (i != handPos && state->hand[currentPlayer][i] == i) {
+		if (i != handPos && state->hand[currentPlayer][i] == i) {		// BUG HERE!! Should say state->hand[currentPlayer][i] == choice1Card
 			returnCards++;
 		}
 	}
@@ -924,7 +926,7 @@ void ambassador_refactor(int choice1, int choice2, struct gameState *state, int 
     for (i = 0; i < state->numPlayers; i++) {
 		
 		if (i != currentPlayer) {
-			gainCard(state->hand[currentPlayer][choice1], state, 0, i);
+			gainCard(state->hand[currentPlayer][choice1], state, 0, i);		// BUG HERE? [choice1] may have changed after discarding cards step. should be [choice1Card]?
 	    }
 	}
 	

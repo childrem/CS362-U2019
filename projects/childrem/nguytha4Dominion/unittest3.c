@@ -48,7 +48,7 @@ int main() {
 
 
 	printf("TESTING ambassadorEffect():\n");
-	printf("\nFirst test have 0 copies asking to remove 2!\n\n");
+	printf("\nFirst test have 1 copy asking to remove 2!\n\n");
 
 	// TEST 1 -- Player has 1 copy of card they want to send to supply but ask to send back 2 -- 
 	// Should not affect gamestate
@@ -94,9 +94,12 @@ int main() {
 	choice1 = 0;
 	choice2 = 2;
 	handPos = maxHandCount - 1;
+	G.whoseTurn = currentPlayer;
+
+	//ambassador_refactor(int choice1, int choice2, struct gameState *state, int handPos)
 
 
-	/*retValue = */ambassadorEffect(choice1, choice2, &G, handPos, currentPlayer);
+	/*retValue = */ambassador_refactor(choice1, choice2, &G, handPos);
 
 
 	// Assert that player hand count is unchanged
@@ -167,9 +170,9 @@ int main() {
 	choice1 = 0;
 	choice2 = 3;
 	handPos = maxHandCount - 1;
+	G.whoseTurn = currentPlayer;
 
-
-	/*retValue = */ambassadorEffect(choice1, choice2, &G, handPos, currentPlayer);
+	/*retValue = */ambassador_refactor(choice1, choice2, &G, handPos);
 
 
 	// Assert that player hand count is unchanged
@@ -240,9 +243,9 @@ int main() {
 	choice2 = 1;
 	handPos = maxHandCount - 1;
 	choice1 = handPos;
+	G.whoseTurn = currentPlayer;
 
-
-	/*retValue = */ambassadorEffect(choice1, choice2, &G, handPos, currentPlayer);
+	/*retValue = */ambassador_refactor(choice1, choice2, &G, handPos);
 
 
 	// Assert that player hand count is unchanged
@@ -316,9 +319,9 @@ int main() {
 	choice2 = 2;
 	handPos = maxHandCount - 1;
 	choice1 = 0;
+	G.whoseTurn = currentPlayer;
 
-
-	/*retValue = */ambassadorEffect(choice1, choice2, &G, handPos, currentPlayer);
+	/*retValue = */ambassador_refactor(choice1, choice2, &G, handPos);
 
 
 	// Assert that player hand count is 3 less
