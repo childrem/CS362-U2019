@@ -42,7 +42,7 @@ void testMinionCard(int choice1, struct gameState *state, int handPos, int curre
 
 	// Call function to test
 
-	minionEffect(choice1, state, handPos, currentPlayer);
+	minion_refactor(choice1, state, handPos);
 
 	// Change the pre-state in the way we expect minionEffect to change the actual code
 
