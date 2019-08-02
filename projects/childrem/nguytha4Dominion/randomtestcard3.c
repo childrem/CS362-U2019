@@ -38,11 +38,13 @@ void testTributeCard(struct gameState *state, int currentPlayer, int nextPlayer,
 
 	struct gameState beforeFunction;
 
+	int handPos = 0;		// Location of the tribute card itself
+
 	memcpy(&beforeFunction, state, sizeof(struct gameState));
 
 	// Call function to test
 
-	tributeEffect(state, currentPlayer, nextPlayer, tributeRevealedCards);
+	tribute_refactor(state, handPos);
 
 	// Change the pre-state in the way we expect minionEffect to change the actual code
 
@@ -228,6 +230,7 @@ int main() {
 
 		}
 
+		G.hand[currentPlayer][0] = tribute;
 
 		testTributeCard(&G, currentPlayer, nextPlayer, tributeRevealedCards);
 

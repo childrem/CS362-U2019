@@ -41,6 +41,8 @@ int main() {
 	int tributeRevealedCards[2] = { -1, -1 };		// The enums of the revealed cards from next player
 	int nextPlayer = currentPlayer + 1;
 
+	int handPos;		// Hand position of the tribute card
+
 
 
 	printf("TESTING tributeEffect():\n");
@@ -62,13 +64,17 @@ int main() {
 
 	G.deckCount[nextPlayer] = 0;
 	G.discardCount[nextPlayer] = 0;
+	G.whoseTurn = currentPlayer;
+	G.hand[currentPlayer][0] = tribute;		// Added for Assignment 5
+	handPos = 0;
 
 	// capture initial state of the game
 	memcpy(&beforeFunction, &G, sizeof(struct gameState));
 
 	// run function to test
 	
-	/*retValue = */tributeEffect(&G, currentPlayer, nextPlayer, tributeRevealedCards);
+	/*retValue = */tribute_refactor(&G, handPos);
+
 
 	// Assert that nothing was discarded for next player (he had no cards to begin with)
 
@@ -110,6 +116,10 @@ int main() {
 
 	G.deckCount[nextPlayer] = 1;
 	G.discardCount[nextPlayer] = 0;
+
+	G.whoseTurn = currentPlayer;
+	G.hand[currentPlayer][0] = tribute;		// Added for Assignment 5
+	handPos = 0;
 	
 
 	// capture initial state of the game
@@ -117,7 +127,7 @@ int main() {
 
 	// run function to test
 	
-	/*retValue = */tributeEffect(&G, currentPlayer, nextPlayer, tributeRevealedCards);
+	/*retValue = */tribute_refactor(&G, handPos);
 
 	// Make sure the number of coins increased by 2
 
@@ -160,13 +170,17 @@ int main() {
 	G.deckCount[nextPlayer] = 0;
 	G.discardCount[nextPlayer] = 1;
 
+	G.whoseTurn = currentPlayer;
+	G.hand[currentPlayer][0] = tribute;		// Added for Assignment 5
+	handPos = 0;
+
 
 	// capture initial state of the game
 	memcpy(&beforeFunction, &G, sizeof(struct gameState));
 
 	// run function to test
 
-	/*retValue = */tributeEffect(&G, currentPlayer, nextPlayer, tributeRevealedCards);
+	/*retValue = */tribute_refactor(&G, handPos);
 
 
 	// Assert that current player got +2 cards in hand
@@ -211,13 +225,16 @@ int main() {
 	G.deckCount[nextPlayer] = 1;
 	G.discardCount[nextPlayer] = 1;
 
+	G.whoseTurn = currentPlayer;
+	G.hand[currentPlayer][0] = tribute;		// Added for Assignment 5
+	handPos = 0;
 
 	// capture initial state of the game
 	memcpy(&beforeFunction, &G, sizeof(struct gameState));
 
 	// run function to test
 
-	/*retValue = */tributeEffect(&G, currentPlayer, nextPlayer, tributeRevealedCards);
+	/*retValue = */tribute_refactor(&G, handPos);
 
 
 	// Assert the number of actions increased by 4

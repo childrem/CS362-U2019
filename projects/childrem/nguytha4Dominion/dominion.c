@@ -5,6 +5,14 @@
 #include <math.h>
 #include <stdlib.h>
 
+void addToDiscardCards(struct gameState *state, int player, int cardToAdd) {
+
+	if (state->discardCount[player] <= MAX_DECK) {		// Can't have a discard count out of bounds
+		state->discard[player][state->discardCount[player]] = cardToAdd;
+		state->discardCount[player]++;
+	}
+}
+
 /*****************************************************************************************/
 
 int compare(const void* a, const void* b) {
@@ -765,7 +773,7 @@ void tribute_refactor(struct gameState *state, int handPos) {
     }
 	
 	// Else the next player has 2 or more cards between their deck and discard pile
-	else {
+	else {		// BUG HERE!!! Most of the tribute code is locked behind this else. If player only has 1 card between deck and discard, none of the tribute effects happen
 		
 		// If the player has no cards in their deck
 		if (state->deckCount[nextPlayer] == 0){
@@ -841,7 +849,7 @@ void tribute_refactor(struct gameState *state, int handPos) {
 			numTributeCards = 1;
 		}
 	
-		for (i = 0; i < numTributeCards; i ++){
+		for (i = 0; i < numTributeCards; i ++){		// BUG HERE!!! numTributeCards is not incremented when card added to revealed array
 			
 			// Treasure cards
 			if (tributeRevealedCards[i] == copper || tributeRevealedCards[i] == silver || tributeRevealedCards[i] == gold){
