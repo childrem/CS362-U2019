@@ -93,10 +93,11 @@ int main() {
 	choice1 = 0;
 	choice2 = gold;
 	handPos = 1;
+	G.whoseTurn = currentPlayer;
 
+	//mine_refactor(int choice1, int choice2, struct gameState *state, int handPos)
 
-
-	/*retValue = */mineEffect(choice1, choice2, &G, handPos, currentPlayer);
+	/*retValue = */mine_refactor(choice1, choice2, &G, handPos);
 
 
 
@@ -177,10 +178,10 @@ int main() {
 	choice1 = 0;
 	choice2 = ambassador;
 	handPos = 1;
+	G.whoseTurn = currentPlayer;
 
 
-
-	/*retValue = */mineEffect(choice1, choice2, &G, handPos, currentPlayer);
+	/*retValue = */mine_refactor(choice1, choice2, &G, handPos);
 
 
 
@@ -216,11 +217,11 @@ int main() {
 
 
 
-	// TEST 3 -- Player has 2 coppers, asks for a silver --
-	// We should see a discard count of 1 (the actual mine card), 1 copper should be trashed with 1 copper 
-	// still in hand, there should be 1 silver in hand and supply of silver should be 1 less.
+	// TEST 3 -- Player has 2 silvers, asks for a gold --
+	// We should see a discard count of 1 (the actual mine card), 1 silver should be trashed with 1 silver 
+	// still in hand, there should be 1 gold in hand and supply of gold should be 1 less.
 
-	printf("\n\nTest 3 Have 2 coppers ask for a silver!\n\n");
+	printf("\n\nTest 3 Have 2 silvers ask for a gold!\n\n");
 
 	// initialze new game
 	memset(&G, 23, sizeof(struct gameState));
@@ -237,7 +238,7 @@ int main() {
 
 		for (int handPosition = 0; handPosition < maxHandCount; handPosition++) {
 			if (handPosition == 0 || handPosition == 2) {
-				G.hand[c][handPosition] = copper;
+				G.hand[c][handPosition] = silver;
 			}
 
 			else if (handPosition == 1) {
@@ -260,12 +261,12 @@ int main() {
 	// run function to test
 
 	choice1 = 0;
-	choice2 = silver;
+	choice2 = gold;
 	handPos = 1;
+	G.whoseTurn = currentPlayer;
 
 
-
-	/*retValue = */mineEffect(choice1, choice2, &G, handPos, currentPlayer);
+	/*retValue = */mine_refactor(choice1, choice2, &G, handPos);
 
 
 
@@ -279,17 +280,17 @@ int main() {
 	asserttrue(G.handCount[nextPlayer], beforeFunction.handCount[nextPlayer], "Hand Count of Next Player");
 
 
-	// Assert that supply count of copper is unchanged
-
-	asserttrue(G.supplyCount[copper],
-		beforeFunction.supplyCount[copper],
-		"Supply of card that was chosen to return (copper)");
-
-	// Assert that supply count of silver is -1
+	// Assert that supply count of silver is unchanged
 
 	asserttrue(G.supplyCount[silver],
-		beforeFunction.supplyCount[silver] - 1,
-		"Supply of card that was chosen to gain (silver)");
+		beforeFunction.supplyCount[silver],
+		"Supply of card that was chosen to return (silver)");
+
+	// Assert that supply count of gold is -1
+
+	asserttrue(G.supplyCount[gold],
+		beforeFunction.supplyCount[gold] - 1,
+		"Supply of card that was chosen to gain (gold)");
 
 	// Assert that other player discard count is unchanged
 
@@ -300,25 +301,25 @@ int main() {
 	asserttrue(G.discardCount[currentPlayer], beforeFunction.discardCount[currentPlayer] + 1,
 		"Discard Count of Current Player");
 
-	// Assert that player has 1 copper and 1 silver in hand
+	// Assert that player has 1 silver and 1 gold in hand
 
-	int numberCopper = 0;
 	int numberSilver = 0;
+	int numberGold = 0;
 
 	for (int handPosition = 0; handPosition < maxHandCount; handPosition++) {
 
-		if (G.hand[currentPlayer][handPosition] == copper) {
-			numberCopper++;
+		if (G.hand[currentPlayer][handPosition] == silver) {
+			numberSilver++;
 		}
 
-		else if (G.hand[currentPlayer][handPosition] == silver) {
-			numberSilver++;
+		else if (G.hand[currentPlayer][handPosition] == gold) {
+			numberGold++;
 		}
 
 	}
 
-	asserttrue(numberCopper, 1, "Number of Coppers in Current Player's Hand");
-	asserttrue(numberSilver, 1, "Number of Silvers in Current Player's Hand");
+	asserttrue(numberSilver, 1, "Number of Coppers in Current Player's Hand");
+	asserttrue(numberGold, 1, "Number of Silvers in Current Player's Hand");
 
 
 

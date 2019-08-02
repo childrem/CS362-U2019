@@ -694,7 +694,7 @@ void mine_refactor(int choice1, int choice2, struct gameState *state, int handPo
 	int playedCard = state->hand[currentPlayer][handPos];	// To keep track of the mine card to discard after
 	
 	// If the card the player is opting to trash is not a treasure card, return from the function
-	if (choice1Card > copper || choice1Card > gold)
+	if (choice1Card > copper || choice1Card > gold)		// BUG HERE!!! If we ask to trash a silver, the function will return. Also anything below copper in enum will be accepted
 		return;
 	
 	// If the card the player is opting to gain is not a treasure card, return from the function
@@ -702,7 +702,7 @@ void mine_refactor(int choice1, int choice2, struct gameState *state, int handPo
 		return;
 	
 	// If the cost of the card the player is trashing + 3 is greater than the card they are trying to gain, return from the function
-	if ((getCost(choice1Card) + 3) > getCost(choice2)) 
+	if ((getCost(choice1Card) + 3) > getCost(choice2))	// BUG HERE!! Should be <
 		return;
 	
 	// Trash the choice1 card
@@ -714,7 +714,7 @@ void mine_refactor(int choice1, int choice2, struct gameState *state, int handPo
 	// Discard the mine card as played
 	for (i = 0; i < state->handCount[currentPlayer]; i++) {
 		
-		if (state->hand[currentPlayer][i] == playedCard)
+		if (state->hand[currentPlayer][i] == playedCard)		// BUG HERE! Could discard multiple mines if present
 			discardCard(i, currentPlayer, state, 0);
 	}
 	
