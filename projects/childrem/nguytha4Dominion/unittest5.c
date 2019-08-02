@@ -318,8 +318,8 @@ int main() {
 
 	}
 
-	asserttrue(numberSilver, 1, "Number of Coppers in Current Player's Hand");
-	asserttrue(numberGold, 1, "Number of Silvers in Current Player's Hand");
+	asserttrue(numberSilver, 1, "Number of Silvers in Current Player's Hand");
+	asserttrue(numberGold, 1, "Number of Golds in Current Player's Hand");
 
 
 
