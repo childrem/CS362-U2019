@@ -952,7 +952,7 @@ void minion_refactor(int choice1, struct gameState *state, int handPos) {
 	int j = 0;
 	
 	// Increase actions by 1
-	state->numActions = state->numActions + 2;
+	state->numActions = state->numActions + 2;		// BUG HERE!!! This should only increase by 1
 		
 	// If player selects the first choice, gain two coins
 	if(choice1 > 0) {
@@ -984,7 +984,7 @@ void minion_refactor(int choice1, struct gameState *state, int handPos) {
 			if (i != currentPlayer) {
 								
 				// if that player's handcount is at least 4 cards
-				if ( state->handCount[currentPlayer] > 4 ) {
+				if ( state->handCount[currentPlayer] > 4 ) {			// BUG HERE!!! This should be state->handCount[i] > 4
 					
 					// discard that player's entire hand
 					while( state->handCount[i] > 0 ) {

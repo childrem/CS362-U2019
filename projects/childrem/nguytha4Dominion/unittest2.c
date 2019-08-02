@@ -79,8 +79,9 @@ int main() {
 	choice1 = 1;
 	currentPlayer = 0;
 	handPos = maxHandCount - 1;
+	G.whoseTurn = currentPlayer;
 
-	/*retValue = */minionEffect(choice1, &G, handPos, currentPlayer);
+	/*retValue = */minion_refactor(choice1, &G, handPos);
 
 
 	// Assert that the action count increased by 1
@@ -173,8 +174,9 @@ int main() {
 	choice1 = 0;
 	currentPlayer = 0;
 	handPos = 0;
+	G.whoseTurn = currentPlayer;
 
-	/*retValue = */minionEffect(choice1, &G, handPos, currentPlayer);
+	/*retValue = */minion_refactor(choice1, &G, handPos);
 
 
 	// Assert that coins stayed the same
@@ -269,8 +271,9 @@ int main() {
 	choice1 = 0;
 	currentPlayer = 0;
 	handPos = 0;
+	G.whoseTurn = currentPlayer;
 
-	/*retValue = */minionEffect(choice1, &G, handPos, currentPlayer);
+	/*retValue = */minion_refactor(choice1, &G, handPos);
 
 
 	// Assert that coins stayed the same
