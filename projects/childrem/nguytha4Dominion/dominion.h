@@ -129,5 +129,10 @@ int getWinners(int players[MAX_PLAYERS], struct gameState *state);
    1, others to 0 */
 
 void addToDiscardCards(struct gameState *state, int player, int cardToAdd);
+void mine_refactor(int choice1, int choice2, struct gameState *state, int handPos);
+void tribute_refactor(struct gameState *state, int handPos);
+void ambassador_refactor(int choice1, int choice2, struct gameState *state, int handPos);
+void minion_refactor(int choice1, struct gameState *state, int handPos);
+void baron_refactor(int choice1, struct gameState *state, int handPos);
 
 #endif
