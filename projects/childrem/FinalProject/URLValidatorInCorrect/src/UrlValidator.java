@@ -540,4 +540,5 @@ public class UrlValidator implements Serializable {
     Matcher matchURL(String value) {
         return URL_PATTERN.matcher(value);
     }
+    
 }

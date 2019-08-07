@@ -494,6 +494,64 @@ protected void setUp() {
        assertTrue(validator.isValid("http://example.com/serach?address=Main%20Avenue"));
        assertTrue(validator.isValid("http://example.com/serach?address=Main+Avenue"));
    }
+   
+   
+   // UNIT TEST WRITTEN FOR FINAL PROJECT PART B
+   // We will have 5 arrays each with 3 values. Some will be valid others won't. We will have a 
+   // series of for loops that will eventually loop through all possiblities.  3^5 = 243 possible
+   // URLs.
+   
+   // Used: http://javadevnotes.com/java-string-array-examples for array help
+   // Used: https://www.w3schools.com/java/java_for_loop.asp for for loop help
+   
+   public void testIsValidUnitTest() {
+	  
+	   UrlValidator validator = new UrlValidator();		// This object has the isValid function we need to test
+	   
+	   String urlToTest;
+	   boolean result;		// Returned value from isValid()
+	   
+	   // Array of schemes
+	   
+	   String[] schemes = {"http://", "httt://", "ftp://"};
+	   
+	   // Array of authorities
+	   
+	   String[] authorities = {"www.google.com", "0.0.0.0", "noway.haha"};
+	   
+	   // Array of ports
+	   
+	   String[] ports = {":port", ":80", ":6534"};
+	   
+	   // Array of paths
+	   
+	   String[] paths = {"/testme", "/..", "/testme/file"};
+	   
+	   // Array of queries
+	   
+	   String[] queries = {"?will=work", "", "?will=work&this=too"};
+	   
+	   
+	   // Loop through all possible combinations and call isValid, then assert the results
+	   
+	   for(int schemeIndex = 0; schemeIndex < schemes.length; schemeIndex++) {
+		   for(int authorityIndex = 0; authorityIndex < authorities.length; authorityIndex++) {
+			   for(int portIndex = 0; portIndex < ports.length; portIndex++) {
+				   for(int pathIndex = 0; pathIndex < paths.length; pathIndex++) {
+					   for(int queryIndex = 0; queryIndex < queries.length; queryIndex++) {
+						   urlToTest = schemes[schemeIndex] + authorities[authorityIndex] + ports[portIndex] + 
+								   paths[pathIndex] + queries[queryIndex];
+						   
+						   System.out.println(urlToTest);
+						   result = validator.isValid(urlToTest);
+						   System.out.println(result);
+					   }
+				   }
+			   }
+		   }
+	   }
+	   
+   }
 
    //-------------------- Test data for creating a composite URL
    /**
