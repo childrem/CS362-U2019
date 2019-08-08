@@ -513,23 +513,25 @@ protected void setUp() {
 	   
 	   // Array of schemes
 	   
-	   String[] schemes = {"http://", "httt://", "ftp://"};
+	   ResultPair[] schemes = {new ResultPair("http://", true), new ResultPair("httt://", false), new ResultPair("ftp://", true)};
 	   
 	   // Array of authorities
 	   
-	   String[] authorities = {"www.google.com", "0.0.0.0", "noway.haha"};
+	   ResultPair[] authorities = {new ResultPair("www.google.com", true), new ResultPair("0.0.0.0", true), 
+			   new ResultPair("noway.haha", false)};
 	   
 	   // Array of ports
 	   
-	   String[] ports = {":port", ":80", ":6534"};
+	   ResultPair[] ports = {new ResultPair(":port", false), new ResultPair(":80", true), new ResultPair(":6534", true)};
 	   
 	   // Array of paths
 	   
-	   String[] paths = {"/testme", "/..", "/testme/file"};
+	   ResultPair[] paths = {new ResultPair("/testme", true), new ResultPair("/..", false), new ResultPair("/testme/file", true)};
 	   
 	   // Array of queries
 	   
-	   String[] queries = {"?will=work", "", "?will=work&this=too"};
+	   ResultPair[] queries = {new ResultPair("?will=work", true), new ResultPair("", true), 
+			   new ResultPair("?will=work&this=too", true)};
 	   
 	   
 	   // Loop through all possible combinations and call isValid, then assert the results
@@ -539,12 +541,31 @@ protected void setUp() {
 			   for(int portIndex = 0; portIndex < ports.length; portIndex++) {
 				   for(int pathIndex = 0; pathIndex < paths.length; pathIndex++) {
 					   for(int queryIndex = 0; queryIndex < queries.length; queryIndex++) {
-						   urlToTest = schemes[schemeIndex] + authorities[authorityIndex] + ports[portIndex] + 
-								   paths[pathIndex] + queries[queryIndex];
+						   urlToTest = schemes[schemeIndex].item + authorities[authorityIndex].item + ports[portIndex].item + 
+								   paths[pathIndex].item + queries[queryIndex].item;
 						   
 						   System.out.println(urlToTest);
 						   result = validator.isValid(urlToTest);
-						   System.out.println(result);
+						   //System.out.println(result);
+						   
+						   
+						   // Assert that the result returned from isValid matches what we would expect to have returned
+						   
+						   if (schemes[schemeIndex].valid == true && authorities[authorityIndex].valid == true && 
+								   ports[portIndex].valid == true && paths[pathIndex].valid == true && 
+								   queries[queryIndex].valid == true) {
+							   
+							   // This should be a valid URL
+							   
+							   assertTrue("Should have been TRUE but isValid returned FALSE", result);
+						   }
+						   
+						   
+						   else {
+							   
+							   assertFalse("Should have been FALSE but isValid returned TRUE", result);
+							   
+						   }
 					   }
 				   }
 			   }
