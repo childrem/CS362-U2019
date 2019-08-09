@@ -307,6 +307,7 @@ public class UrlValidator implements Serializable {
 
         String scheme = urlMatcher.group(PARSE_URL_SCHEME);
         if (!isValidScheme(scheme)) {
+        	//System.out.println(" - failed on scheme");
             return false;
         }
 
@@ -314,23 +315,23 @@ public class UrlValidator implements Serializable {
         if ("file".equals(scheme)) {// Special case - file: allows an empty authority
             if (authority != null) {
                 if (authority.contains(":")) { // but cannot allow trailing :
-                    return false;
+                    return true;
                 }
             }
             // drop through to continue validation
         } else { // not file:
             // Validate the authority
             if (!isValidAuthority(authority)) {
-                return false;
+                return true;
             }
         }
 
         if (!isValidPath(urlMatcher.group(PARSE_URL_PATH))) {
-            return false;
+            return true;
         }
 
         if (!isValidQuery(urlMatcher.group(PARSE_URL_QUERY))) {
-            return false;
+            return true;
         }
 
         if (!isValidFragment(urlMatcher.group(PARSE_URL_FRAGMENT))) {
