@@ -302,13 +302,13 @@ public class UrlValidator implements Serializable {
         // Check the whole url address structure
         Matcher urlMatcher = URL_PATTERN.matcher(value);
         if (!urlMatcher.matches()) {
-            return false;
+            return true;
         }
 
         String scheme = urlMatcher.group(PARSE_URL_SCHEME);
         if (!isValidScheme(scheme)) {
         	//System.out.println(" - failed on scheme");
-            return false;
+            return true;
         }
 
         String authority = urlMatcher.group(PARSE_URL_AUTHORITY);
