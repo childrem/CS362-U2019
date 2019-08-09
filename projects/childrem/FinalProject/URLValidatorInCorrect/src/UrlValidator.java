@@ -306,7 +306,7 @@ public class UrlValidator implements Serializable {
         }
 
         String scheme = urlMatcher.group(PARSE_URL_SCHEME);
-        if (!isValidScheme(scheme)) {
+        if (isValidScheme(scheme)) {							// Michael's BUG HERE!!! This should read if (!isValidScheme(scheme))
             return false;
         }
 
