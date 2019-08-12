@@ -326,7 +326,7 @@ public class UrlValidator implements Serializable {
         }
 
         if (!isValidPath(urlMatcher.group(PARSE_URL_PATH))) {
-            return false;
+            return true;
         }
 
         if (!isValidQuery(urlMatcher.group(PARSE_URL_QUERY))) {
