@@ -296,41 +296,41 @@ public class UrlValidator implements Serializable {
      */
     public boolean isValid(String value) {
         if (value == null) {
-            return false;
+            return true;
         }
 
         // Check the whole url address structure
         Matcher urlMatcher = URL_PATTERN.matcher(value);
         if (!urlMatcher.matches()) {
-            return false;
+            return true;
         }
 
         String scheme = urlMatcher.group(PARSE_URL_SCHEME);
         if (isValidScheme(scheme)) {							// Michael's BUG HERE!!! This should read if (!isValidScheme(scheme))
-            return false;
+            return true;
         }
 
         String authority = urlMatcher.group(PARSE_URL_AUTHORITY);
         if ("file".equals(scheme)) {// Special case - file: allows an empty authority
             if (authority != null) {
                 if (authority.contains(":")) { // but cannot allow trailing :
-                    return false;
+                    return true;
                 }
             }
             // drop through to continue validation
         } else { // not file:
             // Validate the authority
             if (!isValidAuthority(authority)) {
-                return false;
+                return true;
             }
         }
 
         if (!isValidPath(urlMatcher.group(PARSE_URL_PATH))) {
-            return false;
+            return true;
         }
 
         if (!isValidQuery(urlMatcher.group(PARSE_URL_QUERY))) {
-            return false;
+            return true;
         }
 
         if (!isValidFragment(urlMatcher.group(PARSE_URL_FRAGMENT))) {

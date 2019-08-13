@@ -584,6 +584,40 @@ protected void setUp() {
 	   }
 	   
    }
+   
+    public void testRandomTester() {
+	   int i;
+	   int countValid = 0;
+	   int countInvalid = 0;
+	   
+	   for (i = 0; i < 2000; i++) {
+		   int countScheme = testUrlScheme.length;
+		   int countAuthority = testUrlAuthority.length;
+		   int countPort = testUrlPort.length;
+		   int countPath = testPath.length;
+		   int countQuery = testUrlQuery.length;
+		   
+		   int randomScheme = (int) (Math.random() * (countScheme));
+		   int randomAuthority = (int) (Math.random() * (countAuthority));
+		   int randomPort = (int) (Math.random() * (countPort));
+		   int randomPath = (int) (Math.random() * (countPath));
+		   int randomQuery = (int) (Math.random() * (countQuery));
+		   
+		   UrlValidator urlVal = new UrlValidator();
+		   String randomUrl = testUrlScheme[randomScheme].item + testUrlAuthority[randomAuthority].item + 
+				   testUrlPort[randomPort].item + testPath[randomPath].item + testUrlQuery[randomQuery].item;
+		   	   
+		   boolean test = urlVal.isValid(randomUrl.toString());
+		   if (test) {
+			   countValid++;
+		   } else {
+			   countInvalid++;
+
+		   }
+	   }
+	   System.out.println(countValid + " URLs valid");
+	   System.out.println(countInvalid + " URLs invalid"); 
+   }
 
    //-------------------- Test data for creating a composite URL
    /**
