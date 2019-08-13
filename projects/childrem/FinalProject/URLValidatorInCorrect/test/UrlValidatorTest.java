@@ -511,7 +511,6 @@ protected void setUp() {
 	   String urlToTest;
 	   boolean result;		// Returned value from isValid()
 	   
-	   
 	   // Array of schemes
 	   
 	   ResultPair[] schemes = {new ResultPair("http://", true), new ResultPair("httt://", false), new ResultPair("ftp://", true)};
@@ -534,7 +533,6 @@ protected void setUp() {
 	   ResultPair[] queries = {new ResultPair("?will=work", true), new ResultPair("", true), 
 			   new ResultPair("?will=work&this=too", true)};
 	   
-	   
 	   // Loop through all possible combinations and call isValid, then assert the results
 	   
 	   for(int schemeIndex = 0; schemeIndex < schemes.length; schemeIndex++) {
@@ -547,8 +545,6 @@ protected void setUp() {
 						   
 						   System.out.println(urlToTest);
 						   result = validator.isValid(urlToTest);
-						   //System.out.println(result);
-						   
 						   
 						   // Assert that the result returned from isValid matches what we would expect to have returned
 						   
@@ -557,32 +553,31 @@ protected void setUp() {
 								   queries[queryIndex].valid == true) {
 							   
 							   // This should be a valid URL
+							   System.out.print("   Expected: true | Result: ");
+							   System.out.println(result);
 							   
 							   if (result == false) {
-								   System.out.println("FAIL: Should have been TRUE but isValid returned FALSE");
+								   System.out.println("   ****FAIL: Should have been TRUE but isValid returned FALSE****");
 								   
 							   }
 							   
-							   //assertTrue("Should have been TRUE but isValid returned FALSE", result);
 						   }
-						   
 						   
 						   else {
 							   
+							   System.out.print("   Expected: false | Result: ");
+							   System.out.println(result);
+							   
 							   if (result == true) {
-								   System.out.println("FAIL: Should have been FALSE but isValid returned TRUE");
+								   System.out.println("   ****FAIL: Should have been FALSE but isValid returned TRUE****");
 								   
-							   }
-							   
-							   //assertFalse("Should have been FALSE but isValid returned TRUE", result);
-							   
+							   }							   
 						   }
 					   }
 				   }
 			   }
 		   }
 	   }
-	   
    }
    
     public void testRandomTester() {
